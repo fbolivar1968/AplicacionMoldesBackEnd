@@ -1,0 +1,9 @@
+django 
+pyodbc
+django-mssql-backend 
+djangorestframework
+dotenv
+mssql-django
+django-cors-headers
+gunicorn
+django-cors

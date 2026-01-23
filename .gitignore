@@ -1,0 +1,37 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+# Tu carpeta específica de entorno virtual
+entorno/
+
+# --- Django ---
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+static/
+
+# --- Seguridad y Variables de Entorno ---
+.env
+.venv
+env.bak
+venv.bak
+
+# --- Editores y Sistema ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+
+# --- Distribución/Paquetes ---
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
