@@ -7,3 +7,4 @@ mssql-django
 django-cors-headers
 gunicorn
 django-cors
+pandas
