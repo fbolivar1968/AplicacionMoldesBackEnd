@@ -38,3 +38,16 @@ class Familia(models.Model):
     class Meta:
         db_table = 'FAMILIA'
         managed = False
+
+
+#------------------------------------------------------------------------------------------
+# Add 27_01_2026
+
+class estadoHerramental(models.Model):
+    id = models.AutoField(primary_key=True, db_column='eh_IdEstadoHerr')
+    nombre = models.CharField(max_length=20, db_column='eh_NombreEstadoHrr')
+    descripcion = models.TextField(null=True, blank=True, db_column='eh_DescripcionEstadoHrr')
+
+    class Meta:
+        db_table = 'ESTADOHERRAMENTAL'
+        managed = False

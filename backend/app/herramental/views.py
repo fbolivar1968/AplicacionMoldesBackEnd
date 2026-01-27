@@ -8,8 +8,8 @@ Cada ViewSet representa un endpoint CRUD o de solo lectura.
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.permissions import IsAuthenticated
-from .models import TipoHerramental, Herramental, Familia
-from .serializers import TipoHerramentalSerializer, HerramentalSerializer, FamiliaSerializer
+from .models import TipoHerramental, Herramental, Familia, estadoHerramental
+from .serializers import TipoHerramentalSerializer, HerramentalSerializer, FamiliaSerializer, estadoHerramentalSerializer
 
 
 # ViewSets CRUD para cada modelo definido.
@@ -26,4 +26,11 @@ class HerramentalViewSet(ModelViewSet):
 class FamiliaViewSet(ModelViewSet):
     queryset = Familia.objects.all()
     serializer_class = FamiliaSerializer
+    #permission_classes = [IsAuthenticated]
+
+#-----------------------------------------------------------
+# Add 27_01_2026
+class estadoHerramentalViewSet(ModelViewSet):
+    queryset = estadoHerramental.objects.all()
+    serializer_class = estadoHerramentalSerializer
     #permission_classes = [IsAuthenticated]
