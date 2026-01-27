@@ -1,7 +1,8 @@
-from django.db import models
+#from django.db import models
 
 # Create your models here.
 from django.db import models
+
 
 class EstadoMaquina(models.Model):
     id = models.AutoField(
@@ -112,3 +113,43 @@ class Maquina(models.Model):
 
     def __str__(self):
         return f"{self.codigo} - {self.nombre}"
+
+
+
+
+# Tabla actividad --------------------------------------------------
+
+class Actividad(models.Model):
+    id = models.AutoField(
+        primary_key=True,
+        db_column='ac_IdActividad'
+    )
+
+    nombre = models.CharField(
+        max_length=30,
+        db_column='ac_NombreActividad'
+    )
+
+    fecha_creacion = models.DateTimeField(
+        db_column='ac_FechaCreacionActivdad'
+    )
+
+    descripcion = models.CharField(
+        max_length=500,
+        db_column='ac_DescripcionActividad'
+    )
+
+    usuario = models.ForeignKey(
+        'usuarios.Usuario',
+        on_delete=models.PROTECT,
+        db_column='ac_IdUsuario', 
+        related_name='actividades'
+    )
+
+    class Meta:
+        db_table = 'ACTIVIDAD'
+        managed = False
+        #ordering = ['-ac_FechaCreacionActivdad']
+
+    #def __str__(self):
+     #   return self.nombre

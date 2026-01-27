@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Maquina, EstadoMaquina, TipoMaquina
+from .models import Maquina, EstadoMaquina, TipoMaquina, Actividad
 
 
 class EstadoMaquinaSerializer(serializers.ModelSerializer):
@@ -63,3 +63,19 @@ class MaquinaReadSerializer(serializers.ModelSerializer):
             'estado',
             'tipo',
         ]
+
+#_--------------------------------------------------------------
+
+class ActividadSerializer(serializers.ModelSerializer):
+    """
+    Serializer para la actividad.
+    """
+    class Meta:
+        model = Actividad
+        fields = '__all__'
+        """[
+            'id',
+            'usuario',
+            'fecha_creacion',
+            'descripcion',
+        ]"""

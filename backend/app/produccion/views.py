@@ -3,8 +3,8 @@ from rest_framework.permissions import IsAuthenticated
 #from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 
-from .models import Maquina
-from .serializers import MaquinaSerializer, MaquinaReadSerializer
+from .models import Maquina, Actividad
+from .serializers import MaquinaSerializer, MaquinaReadSerializer, ActividadSerializer
 
 
 class MaquinaViewSet(ModelViewSet):
@@ -41,3 +41,41 @@ class MaquinaViewSet(ModelViewSet):
         if self.action in ['list', 'retrieve']:
             return MaquinaReadSerializer
         return MaquinaSerializer
+    
+class ActividadViewSet(ModelViewSet):
+    queryset = Actividad.objects.all()
+    serializer_class = ActividadSerializer
+
+
+
+
+
+
+
+"""
+class ActividadViewSet(ModelViewSet):
+
+    Endpoint CRUD para ACTIVIDAD.
+    GET    → listado / detalle
+    POST   → crear
+    PUT    → actualizar
+    DELETE → eliminar (si reglas lo permiten)
+    
+
+    queryset = Actividad.objects.select_related(
+        'usuario'
+    ).all()
+
+    serializer_class = ActividadSerializer
+
+    #permission_classes = [IsAuthenticated]
+
+    filter_backends = [
+        SearchFilter,
+        OrderingFilter,
+    ]
+
+    search_fields = ['nombre', 'descripcion']
+    ordering_fields = ['nombre', 'fecha_creacion']
+    ordering = ['-fecha_creacion']
+"""
