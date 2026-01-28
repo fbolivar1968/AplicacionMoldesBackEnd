@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'app.produccion',
     'app.usuarios',
     'app.documents',
+    'app.posicion',
 ]
 
 MIDDLEWARE = [
