@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import PisoViewSet, EstanteriaViewSet
 
 router = DefaultRouter()
-#router.register(r'pisos', PisoViewSet)
+router.register(r'pisos', PisoViewSet)
 router.register(r'estanterias', EstanteriaViewSet)
 
 urlpatterns = [
