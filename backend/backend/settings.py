@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'app.usuarios',
     'app.documents',
     'app.posicion',
+    'app.temp',
 ]
 
 MIDDLEWARE = [
