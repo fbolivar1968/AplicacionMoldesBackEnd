@@ -30,8 +30,8 @@ class DataQRFile(models.Model):
     error = models.CharField(max_length=50, db_column='Error', null=True, blank=True)
 
     class Meta:
-        db_table = 'dataqrfile' # Nombre exacto de la tabla en SQL Server
-        verbose_name = 'Archivo de Datos QR'
+        db_table = 'sabana_qr_files'#'dataqrfile' # Nombre exacto de la tabla en SQL Server
+        verbose_name = 'Sabana de datos qr'#Archivo de Datos QR'
         verbose_name_plural = 'Archivos de Datos QR'
         managed = False  # Indica que Django no debe gestionar la creación de esta tabla
 
