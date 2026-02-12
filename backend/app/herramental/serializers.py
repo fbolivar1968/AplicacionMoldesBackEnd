@@ -6,7 +6,7 @@ JSON consumible por frontend.
 """
 
 from rest_framework import serializers
-from .models import TipoHerramental, Herramental, Familia, estadoHerramental
+from .models import * #TipoHerramental, Herramental, Familia, estadoHerramental
 
 class TipoHerramentalSerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,8 +25,15 @@ class FamiliaSerializer(serializers.ModelSerializer):
         model = Familia
         fields = '__all__'
 
-
+"""
 class estadoHerramentalSerializer(serializers.ModelSerializer):
     class Meta:
         model = estadoHerramental
         fields = '__all__'
+"""
+class estadoHerramentalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = estadoHerramental
+        fields = ('id', 
+                  'nombre', 
+                  'descripcion')
