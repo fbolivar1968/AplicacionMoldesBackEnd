@@ -37,3 +37,16 @@ class estadoHerramentalSerializer(serializers.ModelSerializer):
         fields = ('id', 
                   'nombre', 
                   'descripcion')
+        
+#--------------------------------------------------------------------------------
+
+
+class HerramentalEspecificoSerializer(serializers.ModelSerializer):
+    # Atributos "aplanados" para el Frontend
+    #nombre_estado = serializers.ReadOnlyField(source='estado.eh_NombreEstadoHrr')
+    #numero_piso = serializers.ReadOnlyField(source='piso.pi_NumeroPiso')
+    #nombre_estanteria = serializers.ReadOnlyField(source='estanteria.es_NombreEstanteria')
+
+    class Meta:
+        model = HerramentalEspecifico
+        fields = '__all__' # Opcionalmente lista los campos que necesites

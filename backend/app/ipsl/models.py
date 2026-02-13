@@ -10,6 +10,7 @@ class OrdenProduccionForja(models.Model):
     fecha_inicio = models.DateTimeField(db_column='Fecha de Inicio')
     comentario = models.TextField(null=True, blank=True, db_column='Comentario')
     producto = models.TextField(null = True, max_length=50, db_column='Producto')
+    codigo_producto = models.CharField(null=True, blank=True, max_length=60, db_column='Codigo Producto')
 
 
     class Meta:

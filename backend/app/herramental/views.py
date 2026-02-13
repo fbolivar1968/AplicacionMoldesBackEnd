@@ -9,7 +9,7 @@ from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from .models import TipoHerramental, Herramental, Familia, estadoHerramental
-from .serializers import TipoHerramentalSerializer, HerramentalSerializer, FamiliaSerializer, estadoHerramentalSerializer
+from .serializers import * #TipoHerramentalSerializer, HerramentalSerializer, FamiliaSerializer, estadoHerramentalSerializer, HerramentalEspecificoSerializer
 #Librerías para la clase de bajo nivel que recibe parámetros.
 from rest_framework.views import APIView
 from django.http.response import JsonResponse
@@ -53,3 +53,8 @@ class Clase2(APIView):
             return JsonResponse({"data": estadoHerramentalSerializer(data).data}, status=200)
         except estadoHerramental.DoesNotExist:
             return JsonResponse({"error": "No encontrado"}, status=404)
+        
+#--------------------------------------------------------------------------------------------------------------------------------------
+class HerramentalEspecificoViewSet(ModelViewSet):
+    queryset = HerramentalEspecifico.objects.all()
+    serializer_class = HerramentalEspecificoSerializer
