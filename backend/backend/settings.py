@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-*&nda7bw-#cw*wzsc*rb593+$u1z2$g8ky@eu-zqs9z^%sl=5m'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     '10.1.2.14', 'localhost', '127.0.0.1', '10.1.2.180',
@@ -154,8 +154,11 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# URL que verá el navegador para acceder a los archivos multimedia (subidos por los usuarios)
+# Ruta pública para acceder a los archivos multimedia, por ejemplo: http://localhost:8000/media/archivo.jpg
 MEDIA_URL = '/media/'
-MEDIA_ROOT = 'D:/FilseServer/media' # Ruta absoluta en Windows
+# Ruta absoluta en el sistema de archivos donde se almacenarán los archivos multimedia subidos por los usuarios
+MEDIA_ROOT = 'D:/FileServer/media' # Ruta absoluta en Windows
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
