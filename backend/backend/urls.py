@@ -10,4 +10,5 @@ urlpatterns = [
     path('api/', include('app.documents.urls')),
     path('api/', include('app.posicion.urls')),
     path('api/', include('app.temp.urls')),
+    #path('api/', include('herramental.urls')), # Ruta para la aplicación herramental
 ]

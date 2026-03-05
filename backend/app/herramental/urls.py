@@ -21,4 +21,8 @@ router.register(r'herramental_especifico', HerramentalEspecificoViewSet)  # Add 
 urlpatterns = [
     path('', include(router.urls)),
     path('estado_herramental/<int:id>', Clase2.as_view()), # Usa .as_view()
+    #path('api/', include(router.urls)), # Ruta para los ViewSets (CRUD)
 ]
+
+
+#------------------------------------------------------------------------------------------

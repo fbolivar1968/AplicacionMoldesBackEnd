@@ -40,7 +40,7 @@ class estadoHerramentalSerializer(serializers.ModelSerializer):
         
 #--------------------------------------------------------------------------------
 
-
+"""
 class HerramentalEspecificoSerializer(serializers.ModelSerializer):
     # Atributos "aplanados" para el Frontend
     #nombre_estado = serializers.ReadOnlyField(source='estado.eh_NombreEstadoHrr')
@@ -50,3 +50,18 @@ class HerramentalEspecificoSerializer(serializers.ModelSerializer):
     class Meta:
         model = HerramentalEspecifico
         fields = '__all__' # Opcionalmente lista los campos que necesites
+"""
+#05_03_2026 - Add Serializer para HerramentalEspecifico con RELACIONES a estadoHerramental, Piso y Estanteria
+
+class HerramentalEspecificoSerializer(serializers.ModelSerializer):
+    # Campos informativos adicionales para el GET
+    nombre_piso = serializers.ReadOnlyField(source='piso.pi_NumeroPiso')
+    nombre_estanteria = serializers.ReadOnlyField(source='estanteria.es_NombreEstanteria')
+    detalle_ubicacion = serializers.SerializerMethodField()
+
+    class Meta:
+        model = HerramentalEspecifico
+        fields = '__all__'
+
+    def get_detalle_ubicacion(self, obj):
+        return f"F:{obj.ubicacion_herr.uh_NumeroFila} C:{obj.ubicacion_herr.uh_NumeroColumna} P:{obj.ubicacion_herr.uh_NumeroPosicion}"

@@ -8,7 +8,7 @@ Cada ViewSet representa un endpoint CRUD o de solo lectura.
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.permissions import IsAuthenticated
-from .models import TipoHerramental, Herramental, Familia, estadoHerramental
+from .models import * #TipoHerramental, Herramental, Familia, estadoHerramental
 from .serializers import * #TipoHerramentalSerializer, HerramentalSerializer, FamiliaSerializer, estadoHerramentalSerializer, HerramentalEspecificoSerializer
 #Librerías para la clase de bajo nivel que recibe parámetros.
 from rest_framework.views import APIView
@@ -55,6 +55,14 @@ class Clase2(APIView):
             return JsonResponse({"error": "No encontrado"}, status=404)
         
 #--------------------------------------------------------------------------------------------------------------------------------------
-class HerramentalEspecificoViewSet(ModelViewSet):
+"""class HerramentalEspecificoViewSet(ModelViewSet):
+    queryset = HerramentalEspecifico.objects.all()
+    serializer_class = HerramentalEspecificoSerializer"""
+
+# Implementación de ViewSet para HerramentalEspecifico con relaciones a estadoHerramental, Piso y Estanteria (05_03_2026)
+
+
+class HerramentalEspecificoViewSet(ModelViewSet):           #(viewsets.ModelViewSet):
     queryset = HerramentalEspecifico.objects.all()
     serializer_class = HerramentalEspecificoSerializer
+    
