@@ -60,6 +60,11 @@ class Clase2(APIView):
     serializer_class = HerramentalEspecificoSerializer"""
 
 # Implementación de ViewSet para HerramentalEspecifico con relaciones a estadoHerramental, Piso y Estanteria (05_03_2026)
+# Se agrega también un ViewSet para DieSet, que es otra entidad relacionada con ubicaciones (13_03_2026).
+
+class DieSetViewSet(ModelViewSet):
+    queryset = DieSet.objects.all()
+    serializer_class = DieSetSerializer
 
 
 class HerramentalEspecificoViewSet(ModelViewSet):           #(viewsets.ModelViewSet):

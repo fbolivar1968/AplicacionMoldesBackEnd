@@ -104,6 +104,19 @@ class UbicacionHerramental(models.Model):
         return f"F:{self.uh_NumeroFila} C:{self.uh_NumeroColumna} P:{self.uh_NumeroPosicion}"
 
 
+# --- TABLA DIESET ---
+class DieSet(models.Model):
+    di_IdDieSet = models.AutoField(primary_key=True, db_column='di_IdDieSet')
+    di_CodigoDieSet = models.CharField(max_length=20, unique=True, db_column='di_CodigoDieSet')
+    di_Dimensiones = models.CharField(max_length=50, null=True, blank=True, db_column='di_Dimensiones')
+    # Relaciones con ubicaciones.
+    piso = models.ForeignKey(Piso, on_delete=models.PROTECT, db_column='di_IdPiso')
+    estanteria = models.ForeignKey(Estanteria, on_delete=models.PROTECT, db_column='di_IdEstanteria')
+    ubicacion = models.ForeignKey(UbicacionHerramental, on_delete=models.PROTECT, db_column='di_IdUbicacionDieset')
+
+    class Meta: 
+        db_table = 'DIESET'
+    
 
 class HerramentalEspecifico(models.Model):
     hesp_IdHerramentalEspecifico = models.AutoField(primary_key=True, db_column='hesp_IdHerramentalEspecifico')

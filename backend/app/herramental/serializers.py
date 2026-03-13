@@ -52,6 +52,18 @@ class HerramentalEspecificoSerializer(serializers.ModelSerializer):
         fields = '__all__' # Opcionalmente lista los campos que necesites
 """
 #05_03_2026 - Add Serializer para HerramentalEspecifico con RELACIONES a estadoHerramental, Piso y Estanteria
+#13_03_2026 - Add Serializer for DieSet with relationships to Piso and Estanteria, and custom field for location details.
+
+
+class DieSetSerializer(serializers.ModelSerializer):
+    # Campos extra para ver nombres en lugar de IDs en el GET
+    nombre_piso = serializers.ReadOnlyField(source='piso.pi_NumeroPiso')
+    
+    class Meta:
+        model = DieSet
+        fields = '__all__'
+
+
 
 class HerramentalEspecificoSerializer(serializers.ModelSerializer):
     # Campos informativos adicionales para el GET
