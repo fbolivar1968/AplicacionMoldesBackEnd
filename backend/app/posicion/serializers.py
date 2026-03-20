@@ -16,7 +16,7 @@ class EstanteriaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Estanteria
         fields = [
-            #'es_IdEstanteria', 
+            'es_IdEstanteria', 
             'es_NombreEstanteria'
             #'piso',             # Devuelve el ID para el POST/PUT
             #'nombre_del_piso'   # Devuelve el texto descriptivo para el GET
