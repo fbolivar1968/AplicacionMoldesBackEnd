@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Piso, Estanteria
+from .models import Piso, Estanteria, UbicacionHerramental
 
 class PisoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,3 +21,18 @@ class EstanteriaSerializer(serializers.ModelSerializer):
             #'piso',             # Devuelve el ID para el POST/PUT
             #'nombre_del_piso'   # Devuelve el texto descriptivo para el GET
         ]
+        
+
+class UbicacionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UbicacionHerramental
+        # Exponemos los nombres amigables definidos en el modelo
+        fields = ['id_ubicacion', 'fila', 'columna', 'posicion']
+        read_only_fields = ['id_ubicacion']
+
+    def validate(self, data):
+        """
+        Validación extra: Aunque la DB lo controla, aquí podemos 
+        personalizar el mensaje de error si la combinación ya existe.
+        """
+        return data

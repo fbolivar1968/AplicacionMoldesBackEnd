@@ -71,7 +71,7 @@ class Piso(models.Model):
         db_table = 'PISO'
     def __str__(self): return self.pi_NumeroPiso
 
-
+ 
 
 class Estanteria(models.Model):
     es_IdEstanteria = models.AutoField(primary_key=True, db_column='es_IdEstanteria')
