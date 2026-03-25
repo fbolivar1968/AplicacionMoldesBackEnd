@@ -27,8 +27,8 @@ class UbicacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = UbicacionHerramental
         # Exponemos los nombres amigables definidos en el modelo
-        fields = ['id_ubicacion', 'fila', 'columna', 'posicion']
-        read_only_fields = ['id_ubicacion']
+        fields = ['uh_IdUbicacionHerr', 'uh_NumeroFila', 'uh_NumeroColumna', 'uh_NumeroPosicion']
+        read_only_fields = ['uh_IdUbicacionHerr']  # El ID se genera automáticamente
 
     def validate(self, data):
         """

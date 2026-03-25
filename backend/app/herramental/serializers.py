@@ -67,13 +67,54 @@ class DieSetSerializer(serializers.ModelSerializer):
 
 class HerramentalEspecificoSerializer(serializers.ModelSerializer):
     # Campos informativos adicionales para el GET
-    nombre_piso = serializers.ReadOnlyField(source='piso.pi_NumeroPiso')
-    nombre_estanteria = serializers.ReadOnlyField(source='estanteria.es_NombreEstanteria')
+    nombre_piso = serializers.ReadOnlyField(source='hesp_IdPiso.pi_NumeroPiso')
+    nombre_estanteria = serializers.ReadOnlyField(source='hesp_IdEstanteria.es_NombreEstanteria')
     detalle_ubicacion = serializers.SerializerMethodField()
 
     class Meta:
         model = HerramentalEspecifico
-        fields = '__all__'
+        #fields = '__all__'
+        fields = (
+                  'hesp_CodigoHerramental', 
+                  'hesp_CodigoAlterno', 
+                  'hesp_Descripcion1',  
+                  'hesp_CantHerramental', 
+                  'hesp_Observacion', 
+                  'hesp_FechaReparacion', 
+                  'hesp_A',
+                  'hesp_B',
+                  'hesp_C',
+                  'hesp_D',
+                  'hesp_E',
+                  'hesp_F',
+                  'hesp_G',
+                  'hesp_H',
+                  'hesp_I',
+                  'hesp_J',
+                  'hesp_T',
+                  'hesp_IdHerramental',
+                  'hesp_IdTipoHerramental',
+                  'hesp_IdFamilia',
+                  'hesp_IdEstadoHerr',
+                  'hesp_IdMaquinaPP',
+                  'hesp_IdMaquinaOpc',
+                  'hesp_IdActividad',
+                  'hesp_IdPropiedadHerramental',
+                  'hesp_IdPlano',
+                  'hesp_IdManual',
+                  'hesp_IdPlano',
+                  'hesp_IdDieSet',
+                  'hesp_IdChatarrizacion',
+                  'hesp_IdOrdenProduccion',
+                  'hesp_IdPrestamo',
+                  'hesp_IdPiso',
+                  'hesp_IdEstanteria',
+                  'hesp_IdUbicacionHerr',
+                  'nombre_piso',
+                  'nombre_estanteria',
+                  'detalle_ubicacion')
 
     def get_detalle_ubicacion(self, obj):
-        return f"F:{obj.ubicacion_herr.uh_NumeroFila} C:{obj.ubicacion_herr.uh_NumeroColumna} P:{obj.ubicacion_herr.uh_NumeroPosicion}"
+        if obj.hesp_IdUbicacionHerr is None:
+            return None
+        return f"F:{obj.hesp_IdUbicacionHerr.uh_NumeroFila} C:{obj.hesp_IdUbicacionHerr.uh_NumeroColumna} P:{obj.hesp_IdUbicacionHerr.uh_NumeroPosicion}"

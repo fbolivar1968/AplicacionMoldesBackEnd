@@ -39,16 +39,16 @@ class Estanteria(models.Model):
     
     
 class UbicacionHerramental(models.Model):
-    id_ubicacion = models.AutoField(primary_key=True, db_column='uh_IdUbicacionHerr')
-    fila = models.IntegerField(db_column='uh_NumeroFila')
-    columna = models.IntegerField(db_column='uh_NumeroColumna')
-    posicion = models.IntegerField(db_column='uh_NumeroPosicion')
+    uh_IdUbicacionHerr = models.AutoField(primary_key=True, db_column='uh_IdUbicacionHerr')
+    uh_NumeroFila = models.IntegerField(db_column='uh_NumeroFila')
+    uh_NumeroColumna = models.IntegerField(db_column='uh_NumeroColumna')
+    uh_NumeroPosicion = models.IntegerField(db_column='uh_NumeroPosicion')
 
     class Meta:
         db_table = 'UBICACIONHERRAMENTAL'
         managed = False  
         # Replicamos la restricción UNIQUE de tu SQL
-        unique_together = (('fila', 'columna', 'posicion'),)
+        unique_together = (('uh_NumeroFila', 'uh_NumeroColumna', 'uh_NumeroPosicion'),)
 
     def __str__(self):
         return f"F:{self.fila} C:{self.columna} P:{self.posicion}"
