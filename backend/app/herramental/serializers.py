@@ -67,9 +67,9 @@ class DieSetSerializer(serializers.ModelSerializer):
 
 class HerramentalEspecificoSerializer(serializers.ModelSerializer):
     # Campos informativos adicionales para el GET
-    nombre_piso = serializers.ReadOnlyField(source='hesp_IdPiso.pi_NumeroPiso')
-    nombre_estanteria = serializers.ReadOnlyField(source='hesp_IdEstanteria.es_NombreEstanteria')
-    detalle_ubicacion = serializers.SerializerMethodField()
+    #hesp_IdPiso = serializers.ReadOnlyField(source='hesp_IdPiso.pi_NumeroPiso')
+    #hesp_IdEstanteria = serializers.ReadOnlyField(source='hesp_IdEstanteria.es_NombreEstanteria')
+    #hesp_IdUbicacionHerr = serializers.SerializerMethodField()
 
     class Meta:
         model = HerramentalEspecifico
@@ -109,10 +109,7 @@ class HerramentalEspecificoSerializer(serializers.ModelSerializer):
                   'hesp_IdPrestamo',
                   'hesp_IdPiso',
                   'hesp_IdEstanteria',
-                  'hesp_IdUbicacionHerr',
-                  'nombre_piso',
-                  'nombre_estanteria',
-                  'detalle_ubicacion')
+                  'hesp_IdUbicacionHerr')
 
     def get_detalle_ubicacion(self, obj):
         if obj.hesp_IdUbicacionHerr is None:
