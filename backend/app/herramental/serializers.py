@@ -75,6 +75,7 @@ class HerramentalEspecificoSerializer(serializers.ModelSerializer):
         model = HerramentalEspecifico
         #fields = '__all__'
         fields = (
+                  'hesp_IdHerramentalEspecifico',
                   'hesp_CodigoHerramental', 
                   'hesp_CodigoAlterno', 
                   'hesp_Descripcion1',  
@@ -111,7 +112,7 @@ class HerramentalEspecificoSerializer(serializers.ModelSerializer):
                   'hesp_IdPiso',
                   'hesp_IdEstanteria',
                   'hesp_IdUbicacionHerr')
-
+        read_only_fields = ['hesp_IdHerramentalEspecifico']
     def get_detalle_ubicacion(self, obj):
         if obj.hesp_IdUbicacionHerr is None:
             return None

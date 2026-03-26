@@ -152,6 +152,9 @@ class HerramentalEspecifico(models.Model):
     hesp_H = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True, db_column='hesp_H')
     hesp_I = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True, db_column='hesp_I')
     hesp_J = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True, db_column='hesp_J')
+    hesp_L = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True, db_column='hesp_L')
+    hesp_P = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True, db_column='hesp_P')
+    hesp_Q = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True, db_column='hesp_Q')
     hesp_T = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True, db_column='hesp_T')
 
     # RELACIONES (Foreign Keys)
