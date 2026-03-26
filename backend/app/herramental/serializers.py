@@ -102,6 +102,7 @@ class HerramentalEspecificoSerializer(serializers.ModelSerializer):
                   'hesp_IdPropiedadHerramental',
                   'hesp_IdPlano',
                   'hesp_IdManual',
+                  'hesp_IdImagen',
                   'hesp_IdPlano',
                   'hesp_IdDieSet',
                   'hesp_IdChatarrizacion',
