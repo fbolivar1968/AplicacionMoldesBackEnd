@@ -68,6 +68,7 @@ class DieSetViewSet(ModelViewSet):
 
 
 class HerramentalEspecificoViewSet(ModelViewSet):           #(viewsets.ModelViewSet):
-    queryset = HerramentalEspecifico.objects.all()
+    #queryset = HerramentalEspecifico.objects.all()
+    queryset = HerramentalEspecifico.objects.select_related('hesp_IdFamilia').all()
     serializer_class = HerramentalEspecificoSerializer
     

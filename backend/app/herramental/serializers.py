@@ -70,6 +70,8 @@ class HerramentalEspecificoSerializer(serializers.ModelSerializer):
     #hesp_IdPiso = serializers.ReadOnlyField(source='hesp_IdPiso.pi_NumeroPiso')
     #hesp_IdEstanteria = serializers.ReadOnlyField(source='hesp_IdEstanteria.es_NombreEstanteria')
     #hesp_IdUbicacionHerr = serializers.SerializerMethodField()
+    #nombre_familia = serializers.ReadOnlyField(source='hesp_IdFamilia.fa_NombreFamilia')
+    nombre_familia = serializers.SerializerMethodField()
 
     class Meta:
         model = HerramentalEspecifico
@@ -96,6 +98,7 @@ class HerramentalEspecificoSerializer(serializers.ModelSerializer):
                   'hesp_IdHerramental',
                   'hesp_IdTipoHerramental',
                   'hesp_IdFamilia',
+                  'nombre_familia',
                   'hesp_IdEstadoHerr',
                   'hesp_IdMaquinaPP',
                   'hesp_IdMaquinaOpc',
@@ -117,3 +120,9 @@ class HerramentalEspecificoSerializer(serializers.ModelSerializer):
         if obj.hesp_IdUbicacionHerr is None:
             return None
         return f"F:{obj.hesp_IdUbicacionHerr.uh_NumeroFila} C:{obj.hesp_IdUbicacionHerr.uh_NumeroColumna} P:{obj.hesp_IdUbicacionHerr.uh_NumeroPosicion}"
+
+    def get_nombre_familia(self, obj):
+        # Verificamos si existe la relación y si tiene el atributo
+        if obj.hesp_IdFamilia:
+            return obj.hesp_IdFamilia.fa_NombreFamilia
+        return "Sin Familia" # O None

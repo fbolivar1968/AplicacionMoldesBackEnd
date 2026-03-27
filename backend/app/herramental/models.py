@@ -31,9 +31,9 @@ class Herramental(models.Model):
 
 
 class Familia(models.Model):
-    id = models.AutoField(primary_key=True, db_column='fa_IdFamilia')
-    codigo = models.CharField(max_length=4, null=True, blank=True, db_column='fa_CodigoFamilia')
-    nombre = models.CharField(max_length=15, db_column='fa_NombreFamilia')
+    fa_IdFamilia = models.AutoField(primary_key=True, db_column='fa_IdFamilia')
+    fa_CodigoFamilia = models.CharField(max_length=4, null=True, blank=True, db_column='fa_CodigoFamilia')
+    fa_NombreFamilia = models.CharField(max_length=15, db_column='fa_NombreFamilia')
 
     class Meta:
         db_table = 'FAMILIA'
@@ -165,7 +165,8 @@ class HerramentalEspecifico(models.Model):
     # IDs de otras entidades (mantener como IntegerField si no hay modelos creados aún)
     hesp_IdHerramental = models.IntegerField(null=True, blank=True,db_column='hesp_IdHerramental')
     hesp_IdTipoHerramental = models.IntegerField(null=True, blank=True, db_column='hesp_IdTipoHerramental')
-    hesp_IdFamilia = models.IntegerField(null=True, blank=True,db_column='hesp_IdFamilia')
+    #hesp_IdFamilia = models.IntegerField(null=True, blank=True,db_column='hesp_IdFamilia')
+    hesp_IdFamilia = models.ForeignKey(Familia, on_delete=models.PROTECT, null=True, blank=True, db_column='hesp_IdFamilia')
     hesp_IdEstadoHerr = models.IntegerField(null=True, blank=True, db_column='hesp_IdEstadoHerr')
     hesp_IdMaquinaPP = models.IntegerField(null=True, blank=True,db_column='hesp_IdMaquinaPP')
     hesp_IdMaquinaOpc = models.IntegerField(null=True, blank=True, db_column='hesp_IdMaquinaOpc')
