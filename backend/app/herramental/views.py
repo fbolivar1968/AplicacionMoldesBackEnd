@@ -35,7 +35,7 @@ class FamiliaViewSet(ModelViewSet):
 # Add 27_01_2026
 # Se realiza cambio de utilizando modelviewset a apiview para recibir parámetros. (validar efectividad y robustez.)
 class estadoHerramentalViewSet(ModelViewSet):
-    queryset = estadoHerramental.objects.all()
+    queryset = EstadoHerramental.objects.all()
     serializer_class = estadoHerramentalSerializer
     #permission_classes = [IsAuthenticated]
 
@@ -49,9 +49,9 @@ class Clase2(APIView):
 
     def get(self, request, id):
         try:
-            data = estadoHerramental.objects.filter(id=id).get()
+            data = EstadoHerramental.objects.filter(id=id).get()
             return JsonResponse({"data": estadoHerramentalSerializer(data).data}, status=200)
-        except estadoHerramental.DoesNotExist:
+        except EstadoHerramental.DoesNotExist:
             return JsonResponse({"error": "No encontrado"}, status=404)
         
 #--------------------------------------------------------------------------------------------------------------------------------------
@@ -67,8 +67,27 @@ class DieSetViewSet(ModelViewSet):
     serializer_class = DieSetSerializer
 
 
-class HerramentalEspecificoViewSet(ModelViewSet):           #(viewsets.ModelViewSet):
+#comendato 07/04/2026
+"""class HerramentalEspecificoViewSet(ModelViewSet):           #(viewsets.ModelViewSet):
     #queryset = HerramentalEspecifico.objects.all()
     queryset = HerramentalEspecifico.objects.select_related('hesp_IdFamilia').all()
+    serializer_class = HerramentalEspecificoSerializer"""
+    
+class HerramentalEspecificoViewSet(ModelViewSet):
+    # Optimizamos la consulta usando select_related para TODAS las llaves foráneas
+    # Esto hace un JOIN en SQL Server y trae todo en una sola petición.
+    queryset = HerramentalEspecifico.objects.select_related(
+        'hesp_IdFamilia',
+        'hesp_IdTipoHerramental',
+        'hesp_IdEstadoHerr',
+        'hesp_IdMaquinaPP',
+        'hesp_IdMaquinaOpc',
+        'hesp_IdActividad',
+        #'hesp_IdImagen',        # Vital para que la URL de la imagen cargue rápido
+        #'hesp_IdPiso',          # Si vas a mostrar el número de piso
+        #'hesp_IdEstanteria',    # Si vas a mostrar el nombre de estantería
+        #'hesp_IdUbicacionHerr'  # Si vas a mostrar fila/columna
+    ).all()
+    
     serializer_class = HerramentalEspecificoSerializer
     
