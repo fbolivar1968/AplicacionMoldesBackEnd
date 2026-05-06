@@ -61,6 +61,7 @@ class DieSetSerializer(serializers.ModelSerializer):
 #--------------------------------------------------------------------------------
 class HerramentalEspecificoSerializer(serializers.ModelSerializer):
     # Campos extra para ver nombres en lugar de IDs en el GET
+    codigo_familia = serializers.ReadOnlyField(source='hesp_IdFamilia.fa_CodigoFamilia')
     nombre_familia = serializers.ReadOnlyField(source='hesp_IdFamilia.fa_NombreFamilia')
     nombre_estado_Herr = serializers.ReadOnlyField(source='hesp_IdEstadoHerr.eh_NombreEstado')
     nombre_maquina_pp = serializers.ReadOnlyField(source='hesp_IdMaquinaPP.ma_NombreMaquina')
@@ -95,19 +96,20 @@ class HerramentalEspecificoSerializer(serializers.ModelSerializer):
                   'hesp_B',
                   'hesp_C',
                   'hesp_D',
-                  'hesp_E',
-                  'hesp_F',
-                  'hesp_G',
-                  'hesp_H',
-                  'hesp_I',
-                  'hesp_J',
-                  'hesp_T',
+                  #'hesp_E',
+                  #'hesp_F',
+                  #'hesp_G',
+                  #'hesp_H',
+                  #'hesp_I',
+                  #'hesp_J',
+                  #'hesp_T',
                   'hesp_IdHerramental',
                   'nombre_herramental',
                   'hesp_IdTipoHerramental',
                   'nombre_tipo_herra',
                   'codigo_tipo_herra',
                   'hesp_IdFamilia',
+                  'codigo_familia',
                   'nombre_familia',
                   'hesp_IdMaquinaPP',
                   'nombre_maquina_pp',
