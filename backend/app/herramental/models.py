@@ -80,6 +80,7 @@ class UbicacionHerramental(models.Model):
 class TipoHerramental(models.Model):
     th_IdTipoHerramental = models.AutoField(primary_key=True, db_column='th_IdTipoHerramental')
     th_NombreTipoHerramental = models.CharField(max_length=100, db_column='th_NombreTipoHerramental')
+    th_CodigoTipoHerramental = models.CharField(max_length=4, unique=True, db_column='th_CodigoTipoHerramental')
 
     class Meta:
         db_table = 'TIPOHERRAMENTAL'
