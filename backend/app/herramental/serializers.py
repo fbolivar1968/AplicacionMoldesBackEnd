@@ -41,9 +41,7 @@ class estadoHerramentalSerializer(serializers.ModelSerializer):
 class estadoHerramentalSerializer(serializers.ModelSerializer):
     class Meta:
         model = EstadoHerramental
-        fields = ('id', 
-                  'nombre', 
-                  'descripcion')
+        fields = '__all__'
         
 #05_03_2026 - Add Serializer para HerramentalEspecifico con RELACIONES a estadoHerramental, Piso y Estanteria
 #13_03_2026 - Add Serializer for DieSet with relationships to Piso and Estanteria, and custom field for location details.
@@ -53,8 +51,10 @@ class DieSetSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = DieSet
-        fields = '__all__'
-
+        fields = [
+            'eh_IdEstadoHerr',
+            'eh_NombreEstado'
+        ]
 
 #--------------------------------------------------------------------------------
 # Clase serializer para HerramentalEspecifico, incluyendo campos adicionales para mostrar información relacionada de otras tablas (como nombres en lugar de IDs).
