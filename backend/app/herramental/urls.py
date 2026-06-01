@@ -2,7 +2,9 @@
 
 from os import path
 from rest_framework.routers import DefaultRouter
-from .views import Clase2, DieSetViewSet, HerramentalEspecificoViewSet, TipoHerramentalViewSet, HerramentalViewSet, FamiliaViewSet, estadoHerramentalViewSet
+from .views import (Clase2, DieSetViewSet, HerramentalEspecificoViewSet, 
+                    NextConsecutiveView, TipoHerramentalViewSet,
+                    HerramentalViewSet, FamiliaViewSet, estadoHerramentalViewSet)
 #Librerías para incluir rutas con viewsets.
 from django.urls import path, include
 
@@ -23,6 +25,11 @@ urlpatterns = [
     path('', include(router.urls)),
     path('estado_herramental/<int:id>', Clase2.as_view()), # Usa .as_view()
     #path('api/', include(router.urls)), # Ruta para los ViewSets (CRUD)
+        # -----------------------------------------------------------------------
+    # Endpoint: siguiente consecutivo disponible para HerramentalEspecifico
+    # GET /api/herramental/next-consecutive?h=<id>&t=<id>&f=<id>
+    # -----------------------------------------------------------------------
+    path('herramental/next-consecutive', NextConsecutiveView.as_view(), name='next-consecutive'),
 ]
 
 

@@ -15,6 +15,10 @@ from .serializers import * #TipoHerramentalSerializer, HerramentalSerializer, Fa
 #Librerías para la clase de bajo nivel que recibe parámetros.
 from rest_framework.views import APIView
 from django.http.response import JsonResponse
+from rest_framework.response import Response
+from rest_framework import status
+from django.db.models import Max
+
 
 #--------------------------------------------------------------------------------
 # ViewSets CRUD para cada modelo definido.
@@ -90,4 +94,61 @@ class HerramentalEspecificoViewSet(ModelViewSet):
         'hesp_IdDieSet__di_IdUbicacionDieset' # La Ubicación dentro del DieSet
     ).all()
     serializer_class = HerramentalEspecificoSerializer
-    
+
+
+#--------------------------------------------------------------------------------
+# ENDPOINT: Siguiente consecutivo para HerramentalEspecifico
+# GET /api/herramental/next-consecutive?h=<IdHerramental>&t=<IdTipoHerramental>&f=<IdFamilia>
+#
+# Replica la lógica SQL:
+#   SELECT ISNULL(MAX(hesp_Consecutivo), 0) + 1 AS NextConsecutive
+#   FROM HERRAMENTALESPECIFICO
+#   WHERE hesp_IdHerramental = @IdH
+#     AND hesp_IdTipoHerramental = @IdT
+#     AND hesp_IdFamilia = @IdF
+#
+# Respuesta exitosa: { "nextValue": 3 }
+# El frontend aplica .padStart(2, '0') para obtener "03".
+#--------------------------------------------------------------------------------
+class NextConsecutiveView(APIView):
+
+    def get(self, request):
+        # --- 1. Leer y validar los parámetros de la URL ---
+        id_herramental    = request.query_params.get('h')
+        id_tipo_herramental = request.query_params.get('t')
+        id_familia        = request.query_params.get('f')
+
+        # Los tres parámetros son obligatorios
+        if not all([id_herramental, id_tipo_herramental, id_familia]):
+            return Response(
+                {
+                    "error": "Los parámetros 'h' (herramental), 't' (tipo) y 'f' (familia) son requeridos."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Validar que sean enteros para evitar inyección de datos inesperados
+        try:
+            id_herramental      = int(id_herramental)
+            id_tipo_herramental = int(id_tipo_herramental)
+            id_familia          = int(id_familia)
+        except ValueError:
+            return Response(
+                {"error": "Los parámetros deben ser números enteros."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # --- 2. Ejecutar la consulta equivalente al SQL original ---
+        # MAX(hesp_Consecutivo) sobre los registros que coincidan con la combinación.
+        # Si no existe ningún registro, aggregate devuelve None → usamos 0 como fallback.
+        resultado = HerramentalEspecifico.objects.filter(
+            hesp_IdHerramental=id_herramental,
+            hesp_IdTipoHerramental=id_tipo_herramental,
+            hesp_IdFamilia=id_familia,
+        ).aggregate(max_consec=Max('hesp_Consecutivo'))
+
+        max_actual   = resultado['max_consec'] or 0   # ISNULL(..., 0)
+        next_value   = max_actual + 1                 # + 1
+
+        # --- 3. Devolver la respuesta ---
+        return Response({"nextValue": next_value}, status=status.HTTP_200_OK)
