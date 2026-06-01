@@ -51,11 +51,9 @@ class DieSetSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = DieSet
-        fields = [
-            'eh_IdEstadoHerr',
-            'eh_NombreEstado'
-        ]
-
+        fields = '__all__'
+        
+        
 #--------------------------------------------------------------------------------
 # Clase serializer para HerramentalEspecifico, incluyendo campos adicionales para mostrar información relacionada de otras tablas (como nombres en lugar de IDs).
 #--------------------------------------------------------------------------------

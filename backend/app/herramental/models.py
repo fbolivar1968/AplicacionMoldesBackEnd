@@ -121,6 +121,7 @@ class DieSet(models.Model):
     di_IdDieSet = models.AutoField(primary_key=True, db_column='di_IdDieSet')
     di_CodigoDieSet = models.CharField(max_length=50, db_column='di_CodigoDieSet')
     # El DieSet tiene sus propias relaciones
+    di_Dimensiones = models.CharField(max_length=255, null=True, blank=True, db_column='di_Dimensiones') # VARCHAR(MAX)
     di_IdPiso = models.ForeignKey(Piso, on_delete=models.PROTECT, db_column='di_IdPiso')
     di_IdEstanteria = models.ForeignKey(Estanteria, on_delete=models.PROTECT, db_column='di_IdEstanteria')
     di_IdUbicacionDieset = models.ForeignKey(UbicacionHerramental, on_delete=models.PROTECT, db_column='di_IdUbicacionDieset')
