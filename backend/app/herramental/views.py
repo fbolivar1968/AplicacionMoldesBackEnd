@@ -235,8 +235,8 @@ class HerramentalEspecificoViewSet(ModelViewSet):
 
         # ── 1. Leer y validar los 3 IDs obligatorios ────────────────────────
         id_herramental = data.get('hesp_IdHerramental')
-        id_tipo        = data.get('th_IdTipoHerramental')
-        id_familia     = data.get('fa_IdFamilia')
+        id_tipo        = data.get('hesp_IdTipoHerramental')
+        id_familia     = data.get('hesp_IdFamilia')
 
         if not all([id_herramental, id_tipo, id_familia]):
             return Response(
@@ -251,8 +251,8 @@ class HerramentalEspecificoViewSet(ModelViewSet):
 
         try:
             id_herramental = data.get('hesp_IdHerramental')
-            id_tipo        = data.get('th_IdTipoHerramental')
-            id_familia     = data.get('fa_IdFamilia')
+            id_tipo        = data.get('hesp_IdTipoHerramental')
+            id_familia     = data.get('hesp_IdFamilia')
         except (ValueError, TypeError):
             return Response(
                 {"error": "Los IDs deben ser números enteros."},
