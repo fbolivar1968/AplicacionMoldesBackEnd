@@ -10,7 +10,10 @@ JSON consumible por frontend.
 from rest_framework import serializers
 from .models import * #TipoHerramental, Herramental, Familia, estadoHerramental
 
-
+# ==============================================================================
+# SECCIÓN 1 — CATÁLOGOS SIMPLES
+# fields = '__all__' porque son tablas planas sin relaciones que exponer.
+# ==============================================================================
 #--------------------------------------------------------------------------------
 # Serializers para cada modelo, utilizando ModelSerializer para generar automáticamente los campos basados en el modelo.
 #--------------------------------------------------------------------------------
@@ -31,13 +34,7 @@ class FamiliaSerializer(serializers.ModelSerializer):
         model = Familia
         fields = '__all__'
 
-
-class estadoHerramentalSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = EstadoHerramental
-        fields = '__all__'
-        
-        
+ 
 class estadoHerramentalSerializer(serializers.ModelSerializer):
     class Meta:
         model = EstadoHerramental
@@ -46,14 +43,21 @@ class estadoHerramentalSerializer(serializers.ModelSerializer):
 #05_03_2026 - Add Serializer para HerramentalEspecifico con RELACIONES a estadoHerramental, Piso y Estanteria
 #13_03_2026 - Add Serializer for DieSet with relationships to Piso and Estanteria, and custom field for location details.
 
+# ==============================================================================
+# SECCIÓN 2 — DIESET
+# ==============================================================================
 class DieSetSerializer(serializers.ModelSerializer):
-    nombre_piso = serializers.ReadOnlyField(source='piso.pi_NumeroPiso')
+    nombre_piso = serializers.ReadOnlyField(source='di_IdPiso.pi_NumeroPiso')
     
     class Meta:
         model = DieSet
         fields = '__all__'
         
         
+# ==============================================================================
+# SECCIÓN 3 — HERRAMENTAL ESPECÍFICO (serializer principal)
+# Incluye campos ReadOnlyField para mostrar nombres legibles de cada FK.
+# ==============================================================================        
 #--------------------------------------------------------------------------------
 # Clase serializer para HerramentalEspecifico, incluyendo campos adicionales para mostrar información relacionada de otras tablas (como nombres en lugar de IDs).
 #--------------------------------------------------------------------------------
@@ -70,7 +74,7 @@ class HerramentalEspecificoSerializer(serializers.ModelSerializer):
     codigo_dieset = serializers.ReadOnlyField(source='hesp_IdDieSet.di_CodigoDieSet')
     nombre_herramental = serializers.ReadOnlyField(source='hesp_IdHerramental.he_NombreHerramental')
     descripcion_chatarrizacion = serializers.ReadOnlyField(source='hesp_IdChatarrizacion.ch_Descripcion', default=None)
-    consecutivo_op = serializers.ReadOnlyField(source='hesp_IdOrdenProduccion.op_ConsecutivOp', default=None)    
+    consecutivo_op = serializers.ReadOnlyField(source='hesp_IdOrdenProduccion.op_ConsecutivoOp', default=None)    
     estado_prestamo = serializers.ReadOnlyField(source='hesp_IdPrestamo.pr_EstadoPrestamo', default=None)
     numero_piso = serializers.ReadOnlyField(source='hesp_IdPiso.pi_NumeroPiso', default=None)
     descripcion_piso = serializers.ReadOnlyField(source='hesp_IdPiso.pi_DescripcionPiso', default=None)
@@ -130,7 +134,6 @@ class HerramentalEspecificoSerializer(serializers.ModelSerializer):
                   'descripcion_piso',
                   'hesp_IdEstanteria',
                   'nombre_estanteria',
-                  'hesp_IdPlano', 
                   'hesp_IdPropiedadHerramental',
                   'hesp_IdPlano',
                   'hesp_IdManual',
@@ -141,3 +144,25 @@ class HerramentalEspecificoSerializer(serializers.ModelSerializer):
                   'numero_posicion']
         read_only_fields = ['hesp_IdHerramentalEspecifico']
         
+
+# ==============================================================================
+# SECCIÓN 4 — PROPIEDADES DE MATERIAL
+# Usados exclusivamente por PropiedadesHerraView (endpoint unificado).
+# GET /api/propiedades-herramental/ devuelve los 3 en una sola respuesta.
+# ==============================================================================
+class AceroSerializer(serializers.ModelSerializer):
+    class Meta:
+        model  = Acero
+        fields = '__all__'
+ 
+ 
+class DurezaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model  = Dureza
+        fields = '__all__'
+ 
+ 
+class ProveedorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model  = Proveedor
+        fields = '__all__'

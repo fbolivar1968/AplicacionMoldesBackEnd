@@ -3,7 +3,7 @@
 from os import path
 from rest_framework.routers import DefaultRouter
 from .views import (Clase2, DieSetViewSet, HerramentalEspecificoViewSet, 
-                    NextConsecutiveView, TipoHerramentalViewSet,
+                    NextConsecutiveView, PropiedadesHerraView, TipoHerramentalViewSet,
                     HerramentalViewSet, FamiliaViewSet, estadoHerramentalViewSet)
 #Librerías para incluir rutas con viewsets.
 from django.urls import path, include
@@ -30,6 +30,12 @@ urlpatterns = [
     # GET /api/herramental/next-consecutive?h=<id>&t=<id>&f=<id>
     # -----------------------------------------------------------------------
     path('herramental/next-consecutive', NextConsecutiveView.as_view(), name='next-consecutive'),
+    # -----------------------------------------------------------------------
+    # Endpoint unificado: Acero + Dureza + Proveedor en una sola llamada
+    # GET /api/propiedades-herramental/
+    # Responde: { "aceros": [...], "durezas": [...], "proveedores": [...] }
+    # -----------------------------------------------------------------------
+    path('propiedades-herramental/', PropiedadesHerraView.as_view(), name='propiedades-herramental'),
 ]
 
 

@@ -51,4 +51,4 @@ class UbicacionHerramental(models.Model):
         unique_together = (('uh_NumeroFila', 'uh_NumeroColumna', 'uh_NumeroPosicion'),)
 
     def __str__(self):
-        return f"F:{self.fila} C:{self.columna} P:{self.posicion}"
+        return f"F:{self.uh_NumeroFila} C:{self.uh_NumeroColumna} P:{self.uh_NumeroPosicion}"

@@ -49,6 +49,60 @@ class DieSetViewSet(ModelViewSet):
 
 
 # ==============================================================================
+# ENDPOINT UNIFICADO — Propiedades de Herramental
+# GET /api/propiedades-herramental/
+#
+# Devuelve Acero, Dureza y Proveedor en una sola llamada HTTP.
+# El frontend los usa para poblar los selectores del formulario
+# de creación/edición de HerramentalEspecifico sin necesidad de
+# hacer 3 peticiones separadas.
+#
+# Respuesta (200):
+# {
+#   "aceros"      : [ { "ac_IdAcero": 1, "ac_DescripAcero": "D2" }, ... ],
+#   "durezas"     : [ { "du_IdDureza": 1, "du_ValorDureza": "58-62 HRC" }, ... ],
+#   "proveedores" : [ { "pr_IdProveedor": 1, "pr_NombreProv": "Aceros S.A." }, ... ]
+# }
+# ==============================================================================
+ 
+class PropiedadesHerraView(APIView):
+    """
+    Endpoint de solo lectura que consolida los tres catálogos
+    de propiedades de herramental en una única respuesta JSON.
+    """
+    #permission_classes = [IsAuthenticated]
+ 
+    def get(self, request):
+        """
+        Consulta las 3 tablas en paralelo (3 queries independientes)
+        y las devuelve consolidadas en un solo objeto JSON.
+        """
+ 
+        # ── Consultar los 3 catálogos ─────────────────────────────────────
+        # Cada .all() ejecuta un SELECT independiente sobre SQL Server.
+        # El ordering está definido en Meta de cada modelo (alfabético).
+        aceros = Acero.objects.all()
+        durezas = Dureza.objects.all()
+        proveedores = Proveedor.objects.all()
+ 
+        # ── Serializar ────────────────────────────────────────────────────
+        # many=True indica que es una lista de objetos, no uno solo.
+        aceros_data = AceroSerializer(aceros, many=True).data
+        durezas_data = DurezaSerializer(durezas, many=True).data
+        proveedores_data = ProveedorSerializer(proveedores, many=True).data
+ 
+        # ── Responder con los 3 catálogos agrupados ───────────────────────
+        return Response(
+            {
+                "aceros"      : aceros_data,
+                "durezas"     : durezas_data,
+                "proveedores" : proveedores_data,
+            },
+            status=status.HTTP_200_OK
+        )
+ 
+
+# ==============================================================================
 # FUNCIÓN AUXILIAR — Construir código y calcular consecutivo
 # ==============================================================================
 

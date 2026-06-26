@@ -10,14 +10,21 @@ Django solo los usa como mapeo ORM.
 """
 from django.db import models
 
+
+# ==============================================================================
+# SECCIÓN 1 — CATÁLOGOS SIMPLES
+# Tablas maestras sin dependencias entre sí.
+# =============================================================================
+
 class TipoHerramental(models.Model):
-    id = models.AutoField(primary_key=True, db_column='th_IdTipoHerramental')
-    nombre = models.CharField(max_length=15, db_column='th_NombreTipoHerramental')
-    codigo = models.CharField(max_length=4, unique=True, db_column='th_CodigoTipoHerramental')
+    th_IdTipoHerramental = models.AutoField(primary_key=True, db_column='th_IdTipoHerramental')
+    th_NombreTipoHerramental = models.CharField(max_length=100, db_column='th_NombreTipoHerramental')
+    th_CodigoTipoHerramental = models.CharField(max_length=4, unique=True, db_column='th_CodigoTipoHerramental')
 
     class Meta:
-        db_table = 'TIPOHERRAMENTAL' # Nombre exacto de la tabla en la base de datos.
-        managed = False # (False)Indica que Django no debe gestionar la tabla.
+        db_table = 'TIPOHERRAMENTAL'
+        managed = False
+        ordering = ['th_NombreTipoHerramental']
 
 
 class Familia(models.Model):
@@ -30,7 +37,84 @@ class Familia(models.Model):
         managed = False
 
 
-# Add 05_03_2026
+class EstadoHerramental(models.Model):
+    eh_IdEstadoHerr = models.AutoField(primary_key=True, db_column='eh_IdEstadoHerr')
+    eh_NombreEstado = models.CharField(max_length=50, db_column='eh_NombreEstadoHrr')
+    #descripcion = models.TextField(null=True, blank=True, db_column='eh_DescripcionEstadoHrr')
+
+    class Meta:
+        db_table = 'ESTADOHERRAMENTAL'
+        managed = False
+
+
+class Herramental(models.Model):
+    he_IdHerramental = models.AutoField(primary_key=True, db_column='he_IdHerramental')
+    he_NombreHerramental = models.CharField(max_length=15, db_column='he_NombreHerramental')
+    he_CodigoHerramental = models.CharField(max_length=4, unique=True, db_column='he_CodigoHerramental')
+
+    class Meta:
+        db_table = 'HERRAMENTAL'
+        managed = False
+
+
+class Maquina(models.Model):
+    ma_IdMaquina = models.AutoField(primary_key=True, db_column='ma_IdMaquina')
+    ma_NombreMaquina = models.CharField(max_length=100, db_column='ma_NombreMaquina')
+    ma_CodigoMaquina = models.CharField(max_length=20, db_column='ma_CodigoMaquina')
+
+    class Meta:
+        db_table = 'MAQUINA'
+        managed = False
+        
+
+class Actividad(models.Model):
+    ac_IdActividad = models.AutoField(primary_key=True, db_column='ac_IdActividad')
+    ac_NombreActividad = models.CharField(max_length=100, db_column='ac_NombreActividad')
+
+    class Meta:
+        db_table = 'ACTIVIDAD'
+        managed = False
+
+
+class Chatarrizacion(models.Model):
+    ch_IdChatarrizacion = models.AutoField(primary_key=True, db_column='ch_IdChatarrizacion')
+    ch_Descripcion = models.CharField(max_length=255, db_column='ch_Descripcion')
+
+    class Meta:
+        db_table = 'CHATARRIZACION'
+        managed = False
+        
+
+class OrdenProduccion(models.Model):
+    op_IdOrdenProduccion = models.AutoField(primary_key=True, db_column='op_IdOrdenProduccion')
+    op_ConsecutivoOp = models.CharField(max_length=50, db_column='op_ConsecutivoOp')
+
+    class Meta:
+        db_table = 'ORDENPRODUCCION'
+        managed = False
+    
+    def __str__(self):
+        return self.op_ConsecutivoOp
+    
+    
+class Prestamo(models.Model):
+    pr_IdPrestamo = models.AutoField(primary_key=True, db_column='pr_IdPrestamo')
+    pr_EstadoPrestamo = models.CharField(max_length=50, db_column='pr_EstadoPrestamo')
+
+    class Meta:
+        db_table = 'PRESTAMO'
+        managed = False
+        
+    def __str__(self):
+        return self.pr_EstadoPrestamo
+    
+    
+# ==============================================================================
+# SECCIÓN 2 — UBICACIÓN FÍSICA
+# Jerarquía: Piso → Estanteria → UbicacionHerramental
+# Cada nivel depende del anterior, por eso se declaran en este orden.
+# ==============================================================================
+
 class Piso(models.Model):
     pi_IdPiso = models.AutoField(primary_key=True, db_column='pi_IdPiso')
     pi_NumeroPiso = models.CharField(max_length=10, unique=True, db_column='pi_NumeroPiso')
@@ -39,7 +123,10 @@ class Piso(models.Model):
     class Meta:
         db_table = 'PISO'
         managed = False
-    def __str__(self): return self.pi_NumeroPiso
+        ordering = ['pi_NumeroPiso']
+        
+    def __str__(self): 
+        return self.pi_NumeroPiso
 
 
 class Estanteria(models.Model):
@@ -59,7 +146,6 @@ class Estanteria(models.Model):
     #def __str__(self): return self.es_NombreEstanteria #Este método define cómo se mostrará el objeto cuando se imprima o aparezca en el admin de Django
 
 
-
 class UbicacionHerramental(models.Model):
     uh_IdUbicacionHerr = models.AutoField(primary_key=True, db_column='uh_IdUbicacionHerr')
     uh_NumeroFila = models.IntegerField(db_column='uh_NumeroFila')
@@ -74,48 +160,17 @@ class UbicacionHerramental(models.Model):
     def __str__(self):
         return f"F:{self.uh_NumeroFila} C:{self.uh_NumeroColumna} P:{self.uh_NumeroPosicion}"
 
-#---------------------------------------------------------------------------------------------------------------------------------------
-# Generación de modelos para herramental_especifico, para las relaciones que contiene.
-#----------------------------------------------------------------------------------------------------------------------------------------
-class TipoHerramental(models.Model):
-    th_IdTipoHerramental = models.AutoField(primary_key=True, db_column='th_IdTipoHerramental')
-    th_NombreTipoHerramental = models.CharField(max_length=100, db_column='th_NombreTipoHerramental')
-    th_CodigoTipoHerramental = models.CharField(max_length=4, unique=True, db_column='th_CodigoTipoHerramental')
-
-    class Meta:
-        db_table = 'TIPOHERRAMENTAL'
-        managed = False
 
 
-class Maquina(models.Model):
-    ma_IdMaquina = models.AutoField(primary_key=True, db_column='ma_IdMaquina')
-    ma_NombreMaquina = models.CharField(max_length=100, db_column='ma_NombreMaquina')
-    ma_CodigoMaquina = models.CharField(max_length=20, db_column='ma_CodigoMaquina')
-
-    class Meta:
-        db_table = 'MAQUINA'
-        managed = False
-
-class Actividad(models.Model):
-    ac_IdActividad = models.AutoField(primary_key=True, db_column='ac_IdActividad')
-    ac_NombreActividad = models.CharField(max_length=100, db_column='ac_NombreActividad')
-
-    class Meta:
-        db_table = 'ACTIVIDAD'
-        managed = False
+# ==============================================================================
+# SECCIÓN 3 — DIESET
+# Contenedor que agrupa herramentales con ubicación propia.
+# Depende de: Piso, Estanteria, UbicacionHerramental
+# ==============================================================================
 
 #----------------------------------------------------------------------------------------------------------------------------------------
 # Modelos de campos relacionados con HerramentalEspecifico, para optimizar consultas con select_related (07/04/2026)
 #-----------------------------------------------------------------------------------------------------------------------------------------
-class EstadoHerramental(models.Model):
-    eh_IdEstadoHerr = models.AutoField(primary_key=True, db_column='eh_IdEstadoHerr')
-    eh_NombreEstado = models.CharField(max_length=50, db_column='eh_NombreEstadoHrr')
-    #descripcion = models.TextField(null=True, blank=True, db_column='eh_DescripcionEstadoHrr')
-
-    class Meta:
-        db_table = 'ESTADOHERRAMENTAL'
-        managed = False
-
 
 class DieSet(models.Model):
     di_IdDieSet = models.AutoField(primary_key=True, db_column='di_IdDieSet')
@@ -131,45 +186,67 @@ class DieSet(models.Model):
         managed = False
 
 
-class Herramental(models.Model):
-    he_IdHerramental = models.AutoField(primary_key=True, db_column='he_IdHerramental')
-    he_NombreHerramental = models.CharField(max_length=15, db_column='he_NombreHerramental')
-    he_CodigoHerramental = models.CharField(max_length=4, unique=True, db_column='he_CodigoHerramental')
 
+# ==============================================================================
+# SECCIÓN 4 — PROPIEDADES DE MATERIAL
+# Catálogos de características físicas del herramental.
+# Estos tres modelos NO tienen dependencias entre sí ni con otras tablas.
+# ==============================================================================
+
+class Acero(models.Model):
+    ac_IdAcero      = models.AutoField(primary_key=True, db_column='ac_IdAcero')
+    ac_DescripAcero = models.CharField(max_length=50,    db_column='ac_DescripAcero')
+ 
     class Meta:
-        db_table = 'HERRAMENTAL'
+        db_table = 'ACERO'
         managed = False
-
-
-class Chatarrizacion(models.Model):
-    ch_IdChatarrizacion = models.AutoField(primary_key=True, db_column='ch_IdChatarrizacion')
-    ch_Descripcion = models.CharField(max_length=255, db_column='ch_Descripcion')
-
+        verbose_name = 'Acero'
+        verbose_name_plural = 'Aceros'
+        ordering = ['ac_DescripAcero']
+ 
+    def __str__(self):
+        return self.ac_DescripAcero
+ 
+ 
+class Dureza(models.Model):
+    du_IdDureza = models.AutoField(primary_key=True, db_column='du_IdDureza')
+    du_ValorDureza = models.CharField(max_length=10,    db_column='du_ValorDureza')
+ 
     class Meta:
-        db_table = 'CHATARRIZACION'
+        db_table = 'DUREZA'
         managed = False
-
-
-class OrdenProduccion(models.Model):
-    op_IdOrdenProduccion = models.AutoField(primary_key=True, db_column='op_IdOrdenProduccion')
-    op_ConsecutivoOp = models.CharField(max_length=50, db_column='op_ConsecutivoOp')
-
+        verbose_name = 'Dureza'
+        verbose_name_plural = 'Durezas'
+        ordering = ['du_ValorDureza']
+ 
+    def __str__(self):
+        return self.du_ValorDureza
+ 
+ 
+class Proveedor(models.Model):
+    pr_IdProveedor = models.AutoField(primary_key=True, db_column='pr_IdProveedor')
+    pr_NombreProv  = models.CharField(max_length=100,   db_column='pr_NombreProv')
+ 
     class Meta:
-        db_table = 'ORDENPRODUCCION'
+        db_table = 'PROVEEDOR'
         managed = False
-        
-class Prestamo(models.Model):
-    pr_IdPrestamo = models.AutoField(primary_key=True, db_column='pr_IdPrestamo')
-    pr_EstadoPrestamo = models.CharField(max_length=50, db_column='pr_EstadoPrestamo')
+        verbose_name = 'Proveedor'
+        verbose_name_plural = 'Proveedores'
+        ordering = ['pr_NombreProv']
+ 
+    def __str__(self):
+        return self.pr_NombreProv
 
-    class Meta:
-        db_table = 'PRESTAMO'
-        managed = False
-        
-        
+
+# ==============================================================================
+# SECCIÓN 5 — HERRAMENTAL ESPECÍFICO (entidad principal)
+# Registro individual de cada pieza física de herramental.
+# Depende de: todas las secciones anteriores.
+# ==============================================================================  
 #--------------------------------------------------------------------------------
 # Modelos adicionales para HerramentalEspecifico, con relaciones a otras tablas para optimizar consultas y mostrar información relacionada sin necesidad de hacer múltiples consultas (07/04/2026).
 #--------------------------------------------------------------------------------
+
 class HerramentalEspecifico(models.Model):
     hesp_IdHerramentalEspecifico = models.AutoField(primary_key=True, db_column='hesp_IdHerramentalEspecifico')
     hesp_CodigoHerramental = models.CharField(max_length=20, unique=True, db_column='hesp_CodigoHerramental')
@@ -229,3 +306,4 @@ class HerramentalEspecifico(models.Model):
     class Meta:
         db_table = 'HERRAMENTALESPECIFICO'
         managed = False
+        

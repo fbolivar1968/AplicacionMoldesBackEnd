@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*&nda7bw-#cw*wzsc*rb593+$u1z2$g8ky@eu-zqs9z^%sl=5m'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -54,6 +54,13 @@ INSTALLED_APPS = [
     'app.documents',
     'app.posicion',
     'app.temp',
+    # JWT: autenticación con tokens
+    'rest_framework_simplejwt',
+    # JWT Blacklist: permite invalidar refresh tokens en logout
+    # Crea tabla OutstandingToken y BlacklistedToken en la BD
+    'rest_framework_simplejwt.token_blacklist',
+    # App de autenticación personalizada
+    'app.auth_app',
 ]
 
 MIDDLEWARE = [
@@ -164,3 +171,77 @@ MEDIA_ROOT = 'E:/FileServer/media' # Ruta absoluta en Windows
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ==============================================================================
+# DJANGO REST FRAMEWORK — Configuración global -- Added 16/06/2026
+# ==============================================================================
+REST_FRAMEWORK = {
+    # Todas las vistas requieren autenticación por defecto.
+    # Las vistas que deban ser públicas deben declarar explícitamente:
+    #   permission_classes = [AllowAny]
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+ 
+    # JWT como método de autenticación por defecto.
+    # DRF leerá el header: Authorization: Bearer <access_token>
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
+ 
+ 
+# ==============================================================================
+# SIMPLE JWT — Configuración de tokens
+# ==============================================================================
+from datetime import timedelta
+ 
+SIMPLE_JWT = {
+    # Access Token: vida corta por seguridad.
+    # Expira en 15 minutos, el frontend debe renovarlo con el refresh token.
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+ 
+    # Refresh Token: vida larga para no forzar login frecuente.
+    # Expira en 7 días. Si el usuario no usa la app en 7 días, debe volver a loguear.
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+ 
+    # ROTATE_REFRESH_TOKENS: si es True, cada vez que se usa el refresh token
+    # para obtener un nuevo access, también se genera un nuevo refresh token.
+    # Más seguro pero requiere que el frontend guarde el nuevo refresh cada vez.
+    # Lo dejamos en False para simplicidad inicial.
+    'ROTATE_REFRESH_TOKENS': False,
+ 
+    # BLACKLIST_AFTER_ROTATION: solo aplica si ROTATE es True.
+    # Invalida el refresh token anterior después de rotar.
+    'BLACKLIST_AFTER_ROTATION': True,
+ 
+    # Algoritmo de firma del token (HS256 = HMAC con SHA-256)
+    # Usa SECRET_KEY de Django como clave de firma.
+    'ALGORITHM': 'HS256',
+ 
+    # Nombre del header HTTP que debe incluir el token.
+    # El frontend debe enviar: Authorization: Bearer <token>
+    'AUTH_HEADER_TYPES': ('Bearer',),
+ 
+    # Campo del modelo que se guarda en el token como identificador del usuario.
+    # simplejwt buscará este campo para llamar a get_user() del backend.
+    'USER_ID_FIELD': 'id',
+ 
+    # Nombre del claim (clave) dentro del payload del JWT que guarda el user_id.
+    'USER_ID_CLAIM': 'user_id',
+}
+ 
+ 
+# ==============================================================================
+# AUTHENTICATION BACKENDS
+# ==============================================================================
+# Django recorre esta lista en orden al llamar authenticate().
+# Nuestro backend personalizado valida contra la tabla USUARIO de negocio.
+# ModelBackend (el default) valida contra auth_user; lo mantenemos como fallback
+# para el panel de administración de Django.
+AUTHENTICATION_BACKENDS = [
+    # Primero: nuestro backend de negocio (tabla USUARIO)
+    'app.auth_app.backends.UsuarioNegocioBackend',
+    # Segundo: backend por defecto de Django (para el admin)
+    'django.contrib.auth.backends.ModelBackend',
+]
