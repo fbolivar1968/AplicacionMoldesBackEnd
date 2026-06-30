@@ -128,6 +128,7 @@ CORS_ALLOW_ALL_ORIGINS = True # Desactivar en producción
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -178,9 +179,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     # Todas las vistas requieren autenticación por defecto.
     # Las vistas que deban ser públicas deben declarar explícitamente:
-    #   permission_classes = [AllowAny]
+    #permission_classes = [AllowAny]
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
+        #'rest_framework.permissions.IsAuthenticated',
     ],
  
     # JWT como método de autenticación por defecto.
@@ -245,3 +247,4 @@ AUTHENTICATION_BACKENDS = [
     # Segundo: backend por defecto de Django (para el admin)
     'django.contrib.auth.backends.ModelBackend',
 ]
+
