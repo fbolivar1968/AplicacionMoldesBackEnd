@@ -304,9 +304,9 @@ class HerramentalEspecificoViewSet(ModelViewSet):
             )
 
         try:
-            id_herramental = data.get('hesp_IdHerramental')
-            id_tipo        = data.get('hesp_IdTipoHerramental')
-            id_familia     = data.get('hesp_IdFamilia')
+            id_herramental = int(data.get('hesp_IdHerramental'))
+            id_tipo        = int(data.get('hesp_IdTipoHerramental'))
+            id_familia     = int(data.get('hesp_IdFamilia'))
         except (ValueError, TypeError):
             return Response(
                 {"error": "Los IDs deben ser números enteros."},

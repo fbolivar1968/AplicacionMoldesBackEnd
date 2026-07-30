@@ -47,7 +47,7 @@ class estadoHerramentalSerializer(serializers.ModelSerializer):
 # SECCIÓN 2 — DIESET
 # ==============================================================================
 class DieSetSerializer(serializers.ModelSerializer):
-    nombre_piso = serializers.ReadOnlyField(source='di_IdPiso.pi_NumeroPiso')
+    nombre_piso = serializers.ReadOnlyField(source='di_IdPiso.di_NumeroPiso')
     
     class Meta:
         model = DieSet

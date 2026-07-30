@@ -1,8 +1,8 @@
-from django.contrib import admin
+# from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    # path('admin/', admin.site.urls), # Disabled: admin app requires auth_user table
     # Endpoints de autenticación JWT
     # POST /api/auth/login/    → obtener tokens
     # POST /api/auth/refresh/  → renovar access token

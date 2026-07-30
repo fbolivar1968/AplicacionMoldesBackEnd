@@ -39,11 +39,11 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
+    # 'django.contrib.admin',       # Disabled: admin UI disabled
+    'django.contrib.auth',         # Enabled for Python model definitions & DRF/SimpleJWT compatibility
+    'django.contrib.contenttypes', # Enabled for Django app registry & DRF compatibility
+    # 'django.contrib.sessions',    # Disabled: stateless JWT API
+    # 'django.contrib.messages',    # Disabled: relies on session middleware
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
@@ -56,9 +56,7 @@ INSTALLED_APPS = [
     'app.temp',
     # JWT: autenticación con tokens
     'rest_framework_simplejwt',
-    # JWT Blacklist: permite invalidar refresh tokens en logout
-    # Crea tabla OutstandingToken y BlacklistedToken en la BD
-    'rest_framework_simplejwt.token_blacklist',
+    # 'rest_framework_simplejwt.token_blacklist', # Disabled: requires auth_user table
     # App de autenticación personalizada
     'app.auth_app',
 ]
@@ -66,11 +64,11 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    # 'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
+    # 'django.contrib.auth.middleware.AuthenticationMiddleware',
+    # 'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -84,8 +82,8 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+                # 'django.contrib.auth.context_processors.auth',
+                # 'django.contrib.messages.context_processors.messages',
             ],
         },
     },
@@ -129,7 +127,7 @@ CORS_ALLOW_ALL_ORIGINS = True # Desactivar en producción
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
 
-AUTH_PASSWORD_VALIDATORS = [
+""" AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
@@ -142,7 +140,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
-]
+] """
 
 
 # Internationalization
@@ -177,18 +175,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # DJANGO REST FRAMEWORK — Configuración global -- Added 16/06/2026
 # ==============================================================================
 REST_FRAMEWORK = {
-    # Todas las vistas requieren autenticación por defecto.
-    # Las vistas que deban ser públicas deben declarar explícitamente:
-    #permission_classes = [AllowAny]
+    # Permisos por defecto: AllowAny durante desarrollo o IsAuthenticated según configuración
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
-        #'rest_framework.permissions.IsAuthenticated',
     ],
- 
-    # JWT como método de autenticación por defecto.
-    # DRF leerá el header: Authorization: Bearer <access_token>
+
+    # Autenticador JWT personalizado para rescatar objetos Usuario de la tabla USUARIO
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'app.auth_app.backends.UsuarioJWTAuthentication',
     ],
 }
  
@@ -241,10 +235,10 @@ SIMPLE_JWT = {
 # Nuestro backend personalizado valida contra la tabla USUARIO de negocio.
 # ModelBackend (el default) valida contra auth_user; lo mantenemos como fallback
 # para el panel de administración de Django.
-AUTHENTICATION_BACKENDS = [
-    # Primero: nuestro backend de negocio (tabla USUARIO)
-    'app.auth_app.backends.UsuarioNegocioBackend',
-    # Segundo: backend por defecto de Django (para el admin)
-    'django.contrib.auth.backends.ModelBackend',
-]
+# AUTHENTICATION_BACKENDS = [
+#     # Primero: nuestro backend de negocio (tabla USUARIO)
+#     #'app.auth_app.backends.UsuarioNegocioBackend',
+#     # ModelBackend por defecto desactivado para evitar consultas a auth_user
+#     # 'django.contrib.auth.backends.ModelBackend',
+# ]
 
