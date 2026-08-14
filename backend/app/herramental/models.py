@@ -238,6 +238,46 @@ class Proveedor(models.Model):
         return self.pr_NombreProv
 
 
+class PropiedadHerramental(models.Model):
+    ph_IdPropiedadHerramental = models.AutoField(primary_key=True, db_column='ph_IdPropiedadHerramental')
+    ph_DescripHerra           = models.CharField(max_length=500, null=True, blank=True, db_column='ph_DescripHerra')
+    ph_FechaCreacion          = models.DateTimeField(auto_now_add=True, null=True, blank=True, db_column='ph_FechaCreacion')
+
+    class Meta:
+        db_table = 'PROPIEDADHERRAMENTAL'
+        managed = False
+
+
+class PropiedadHerrDureza(models.Model):
+    phd_IdHerradureza = models.IntegerField(primary_key=True, db_column='phd_IdHerradureza')
+    phd_IdDureza      = models.ForeignKey(Dureza, on_delete=models.PROTECT, db_column='phd_IdDureza')
+
+    class Meta:
+        db_table = 'PROPIEDADHERRADUREZA'
+        managed = False
+
+
+class PropiedadHerrAcero(models.Model):
+    pha_IdPropiedadHerracero = models.IntegerField(primary_key=True, db_column='pha_IdPropiedadHerracero')
+    pha_IdAcero              = models.ForeignKey(Acero, on_delete=models.PROTECT, db_column='pha_IdAcero')
+
+    class Meta:
+        db_table = 'PROPIEDADHERRACERO'
+        managed = False
+
+
+class PropiedadHerraProveedor(models.Model):
+    php_IdHerraproveedor = models.IntegerField(primary_key=True, db_column='php_IdHerraproveedor')
+    php_IdProveedor      = models.ForeignKey(Proveedor, on_delete=models.PROTECT, db_column='php_IdProveedor')
+    php_PrecioTotal      = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True, db_column='php_PrecioTotal')
+
+    class Meta:
+        db_table = 'PROPIEDADHERRAPROVEEDOR'
+        managed = False
+
+
+
+
 # ==============================================================================
 # SECCIÓN 5 — HERRAMENTAL ESPECÍFICO (entidad principal)
 # Registro individual de cada pieza física de herramental.
@@ -256,6 +296,7 @@ class HerramentalEspecifico(models.Model):
     hesp_CantHerramental = models.IntegerField(db_column='hesp_CantHerramental')
     hesp_Observacion = models.CharField(max_length=100, null=True, blank=True, db_column='hesp_Observacion')
     hesp_FechaReparacion = models.DateTimeField(null=True, blank=True, db_column='hesp_FechaReparacion')
+    hesp_Criticidad = models.CharField(max_length=20, null=True, blank=True, db_column='hesp_Criticidad')
     # Atributos técnicos (TINYINT -> PositiveSmallIntegerField, DECIMAL -> DecimalField)
     hesp_NumNariz = models.PositiveSmallIntegerField(null=True, blank=True, db_column='hesp_NumNariz')
     hesp_NumCopas = models.PositiveSmallIntegerField(null=True, blank=True, db_column='hesp_NumCopas')

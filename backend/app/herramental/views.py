@@ -48,6 +48,12 @@ class DieSetViewSet(ModelViewSet):
     serializer_class = DieSetSerializer
 
 
+class PropiedadHerramentalViewSet(ModelViewSet):
+    queryset = PropiedadHerramental.objects.all()
+    serializer_class = PropiedadHerramentalSerializer
+
+
+
 # ==============================================================================
 # ENDPOINT UNIFICADO — Propiedades de Herramental
 # GET /api/propiedades-herramental/
@@ -258,6 +264,18 @@ class HerramentalEspecificoViewSet(ModelViewSet):
         'hesp_IdDieSet__di_IdUbicacionDieset',
     ).all()
     serializer_class = HerramentalEspecificoSerializer
+
+    # Recover hesp_CodigoHerramental by hesp_IdHerramental, hesp_IdTipoHerramental and hesp_IdFamilia
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        codigo = (
+            self.request.query_params.get('hesp_CodigoHerramental') or
+            self.request.query_params.get('codigo_herramental') or
+            self.request.query_params.get('codigoHerramental')
+        )
+        if codigo:
+            queryset = queryset.filter(hesp_CodigoHerramental__iexact=codigo.strip())
+        return queryset
 
     def create(self, request, *args, **kwargs):
         """

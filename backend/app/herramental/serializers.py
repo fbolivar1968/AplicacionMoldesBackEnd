@@ -82,6 +82,12 @@ class HerramentalEspecificoSerializer(serializers.ModelSerializer):
     numero_fila = serializers.ReadOnlyField(source='hesp_IdUbicacionHerr.uh_NumeroFila', default=None)
     numero_columna = serializers.ReadOnlyField(source='hesp_IdUbicacionHerr.uh_NumeroColumna', default=None)
     numero_posicion = serializers.ReadOnlyField(source='hesp_IdUbicacionHerr.uh_NumeroPosicion', default=None)
+    nombre_acero = serializers.ReadOnlyField(source='hesp_IdPropiedadHerramental.pha_IdAcero.ac_NombreAcero', default=None)
+    nombre_dureza = serializers.ReadOnlyField(source='hesp_IdPropiedadHerramental.phd_IdDureza.du_NombreDureza', default=None)
+    nombre_proveedor = serializers.ReadOnlyField(source='hesp_IdPropiedadHerramental.php_IdProveedor.pr_NombreProveedor', default=None)
+    fecha_creacion = serializers.ReadOnlyField(source='hesp_IdPropiedadHerramental.ph_FechaCreacion', default=None)
+    descripcion_herra = serializers.ReadOnlyField(source='hesp_IdPropiedadHerramental.ph_DescripHerra', default=None)
+    
 
     class Meta:
         model = HerramentalEspecifico
@@ -141,7 +147,14 @@ class HerramentalEspecificoSerializer(serializers.ModelSerializer):
                   'hesp_IdUbicacionHerr',
                   'numero_fila',
                   'numero_columna',
-                  'numero_posicion']
+                  'numero_posicion',
+                  'hesp_IdPropiedadHerramental',
+                  'nombre_acero',
+                  'nombre_dureza',
+                  'nombre_proveedor',
+                  'fecha_creacion',
+                  'descripcion_herra',
+                  'hesp_Criticidad']
         read_only_fields = ['hesp_IdHerramentalEspecifico']
         
 
@@ -166,3 +179,39 @@ class ProveedorSerializer(serializers.ModelSerializer):
     class Meta:
         model  = Proveedor
         fields = '__all__'
+
+
+class PropiedadHerramentalSerializer(serializers.ModelSerializer):
+    ac_IdAcero = serializers.IntegerField(write_only=True, required=False, allow_null=True)
+    du_IdDureza = serializers.IntegerField(write_only=True, required=False, allow_null=True)
+    pr_IdProveedor = serializers.IntegerField(write_only=True, required=False, allow_null=True)
+    php_PrecioTotal = serializers.DecimalField(max_digits=12, decimal_places=2, write_only=True, required=False, allow_null=True)
+
+    class Meta:
+        model = PropiedadHerramental
+        fields = [
+            'ph_IdPropiedadHerramental',
+            'ph_DescripHerra',
+            'ph_FechaCreacion',
+            'ac_IdAcero',
+            'du_IdDureza',
+            'pr_IdProveedor',
+            'php_PrecioTotal'
+        ]
+
+    def create(self, validated_data):
+        ac_id = validated_data.pop('ac_IdAcero', None)
+        du_id = validated_data.pop('du_IdDureza', None)
+        pr_id = validated_data.pop('pr_IdProveedor', None)
+        precio = validated_data.pop('php_PrecioTotal', None)
+
+        propiedad = PropiedadHerramental.objects.create(**validated_data)
+
+        if ac_id:
+            PropiedadHerrAcero.objects.create(pha_IdPropiedadHerramental=propiedad, pha_IdAcero_id=ac_id)
+        if du_id:
+            PropiedadHerrDureza.objects.create(phd_IdPropiedadHerramental=propiedad, phd_IdDureza_id=du_id)
+        if pr_id:
+            PropiedadHerraProveedor.objects.create(php_IdPropiedadHerramental=propiedad, php_IdProveedor_id=pr_id, php_PrecioTotal=precio)
+
+        return propiedad
