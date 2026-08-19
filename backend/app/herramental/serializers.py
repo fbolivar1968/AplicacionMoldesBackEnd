@@ -66,8 +66,8 @@ class HerramentalEspecificoSerializer(serializers.ModelSerializer):
     codigo_familia = serializers.ReadOnlyField(source='hesp_IdFamilia.fa_CodigoFamilia')
     nombre_familia = serializers.ReadOnlyField(source='hesp_IdFamilia.fa_NombreFamilia')
     nombre_estado_Herr = serializers.ReadOnlyField(source='hesp_IdEstadoHerr.eh_NombreEstado')
-    nombre_maquina_pp = serializers.ReadOnlyField(source='hesp_IdMaquinaPP.ma_NombreMaquina')
-    nombre_maquina_opc = serializers.ReadOnlyField(source='hesp_IdMaquinaOpc.ma_NombreMaquina')
+    num_maquina_pp = serializers.ReadOnlyField(source='hesp_IdMaquinaPP.ma_NumMaquina')
+    num_maquina_opc = serializers.ReadOnlyField(source='hesp_IdMaquinaOpc.ma_NumMaquina')
     nombre_actividad = serializers.ReadOnlyField(source='hesp_IdActividad.ac_NombreActividad')
     nombre_tipo_herra = serializers.ReadOnlyField(source='hesp_IdTipoHerramental.th_NombreTipoHerramental')
     codigo_tipo_herra = serializers.ReadOnlyField(source='hesp_IdTipoHerramental.codigo')
@@ -82,9 +82,9 @@ class HerramentalEspecificoSerializer(serializers.ModelSerializer):
     numero_fila = serializers.ReadOnlyField(source='hesp_IdUbicacionHerr.uh_NumeroFila', default=None)
     numero_columna = serializers.ReadOnlyField(source='hesp_IdUbicacionHerr.uh_NumeroColumna', default=None)
     numero_posicion = serializers.ReadOnlyField(source='hesp_IdUbicacionHerr.uh_NumeroPosicion', default=None)
-    nombre_acero = serializers.ReadOnlyField(source='hesp_IdPropiedadHerramental.pha_IdAcero.ac_NombreAcero', default=None)
-    nombre_dureza = serializers.ReadOnlyField(source='hesp_IdPropiedadHerramental.phd_IdDureza.du_NombreDureza', default=None)
-    nombre_proveedor = serializers.ReadOnlyField(source='hesp_IdPropiedadHerramental.php_IdProveedor.pr_NombreProveedor', default=None)
+    nombre_acero = serializers.ReadOnlyField(source='hesp_IdPropiedadHerramental.acero_rel.pha_IdAcero.ac_DescripAcero', default=None)
+    nombre_dureza = serializers.ReadOnlyField(source='hesp_IdPropiedadHerramental.dureza_rel.phd_IdDureza.du_ValorDureza', default=None)
+    nombre_proveedor = serializers.ReadOnlyField(source='hesp_IdPropiedadHerramental.proveedor_rel.php_IdProveedor.pr_NombreProv', default=None)
     fecha_creacion = serializers.ReadOnlyField(source='hesp_IdPropiedadHerramental.ph_FechaCreacion', default=None)
     descripcion_herra = serializers.ReadOnlyField(source='hesp_IdPropiedadHerramental.ph_DescripHerra', default=None)
     
@@ -120,9 +120,9 @@ class HerramentalEspecificoSerializer(serializers.ModelSerializer):
                   'codigo_familia',
                   'nombre_familia',
                   'hesp_IdMaquinaPP',
-                  'nombre_maquina_pp',
+                  'num_maquina_pp',
                   'hesp_IdMaquinaOpc',
-                  'nombre_maquina_opc',
+                  'num_maquina_opc',
                   'hesp_IdActividad',
                   'nombre_actividad',
                   'hesp_IdEstadoHerr',
@@ -208,10 +208,27 @@ class PropiedadHerramentalSerializer(serializers.ModelSerializer):
         propiedad = PropiedadHerramental.objects.create(**validated_data)
 
         if ac_id:
-            PropiedadHerrAcero.objects.create(pha_IdPropiedadHerramental=propiedad, pha_IdAcero_id=ac_id)
+            # Use primary key field name matching model
+            acero = Acero.objects.get(pk=ac_id)
+
+
+            PropiedadHerrAcero.objects.create(
+            pha_IdPropiedadHerracero=propiedad.ph_IdPropiedadHerramental,
+            pha_IdAcero=acero,
+            )
         if du_id:
-            PropiedadHerrDureza.objects.create(phd_IdPropiedadHerramental=propiedad, phd_IdDureza_id=du_id)
+            dureza = Dureza.objects.get(pk=du_id)
+
+            PropiedadHerrDureza.objects.create(
+                phd_IdHerradureza=propiedad.ph_IdPropiedadHerramental,
+                phd_IdDureza=dureza,
+            )
         if pr_id:
-            PropiedadHerraProveedor.objects.create(php_IdPropiedadHerramental=propiedad, php_IdProveedor_id=pr_id, php_PrecioTotal=precio)
+            proveedor = Proveedor.objects.get(pk=pr_id)
+            PropiedadHerraProveedor.objects.create(
+                php_IdHerraproveedor=propiedad.ph_IdPropiedadHerramental,
+                php_IdProveedor=proveedor,
+                php_PrecioTotal=precio,
+            )
 
         return propiedad

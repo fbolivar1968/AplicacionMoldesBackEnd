@@ -60,7 +60,7 @@ class Herramental(models.Model):
 class Maquina(models.Model):
     ma_IdMaquina = models.AutoField(primary_key=True, db_column='ma_IdMaquina')
     ma_NombreMaquina = models.CharField(max_length=100, db_column='ma_NombreMaquina')
-    ma_CodigoMaquina = models.CharField(max_length=20, db_column='ma_CodigoMaquina')
+    ma_NumMaquina = models.CharField(max_length=20, db_column='ma_NumMaquina')
 
     class Meta:
         db_table = 'MAQUINA'
@@ -249,7 +249,7 @@ class PropiedadHerramental(models.Model):
 
 
 class PropiedadHerrDureza(models.Model):
-    phd_IdHerradureza = models.IntegerField(primary_key=True, db_column='phd_IdHerradureza')
+    phd_IdHerradureza = models.OneToOneField(PropiedadHerramental, on_delete=models.PROTECT, primary_key=True, db_column='phd_IdHerradureza', related_name='dureza_rel')
     phd_IdDureza      = models.ForeignKey(Dureza, on_delete=models.PROTECT, db_column='phd_IdDureza')
 
     class Meta:
@@ -258,7 +258,7 @@ class PropiedadHerrDureza(models.Model):
 
 
 class PropiedadHerrAcero(models.Model):
-    pha_IdPropiedadHerracero = models.IntegerField(primary_key=True, db_column='pha_IdPropiedadHerracero')
+    pha_IdPropiedadHerracero = models.OneToOneField(PropiedadHerramental, on_delete=models.PROTECT, primary_key=True, db_column='pha_IdPropiedadHerracero', related_name='acero_rel')
     pha_IdAcero              = models.ForeignKey(Acero, on_delete=models.PROTECT, db_column='pha_IdAcero')
 
     class Meta:
@@ -267,7 +267,7 @@ class PropiedadHerrAcero(models.Model):
 
 
 class PropiedadHerraProveedor(models.Model):
-    php_IdHerraproveedor = models.IntegerField(primary_key=True, db_column='php_IdHerraproveedor')
+    php_IdHerraproveedor = models.OneToOneField(PropiedadHerramental, on_delete=models.PROTECT, primary_key=True, db_column='php_IdHerraproveedor', related_name='proveedor_rel')
     php_IdProveedor      = models.ForeignKey(Proveedor, on_delete=models.PROTECT, db_column='php_IdProveedor')
     php_PrecioTotal      = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True, db_column='php_PrecioTotal')
 
@@ -339,7 +339,7 @@ class HerramentalEspecifico(models.Model):
     hesp_IdChatarrizacion = models.ForeignKey(Chatarrizacion, on_delete=models.PROTECT, null=True, blank=True, db_column='hesp_IdChatarrizacion')
     hesp_IdOrdenProduccion = models.ForeignKey(OrdenProduccion, on_delete=models.PROTECT, null=True, blank=True, db_column='hesp_IdOrdenProduccion')
     hesp_IdPrestamo = models.ForeignKey(Prestamo, on_delete=models.PROTECT, null=True, blank=True, db_column='hesp_IdPrestamo')
-    hesp_IdPropiedadHerramental = models.IntegerField(null=True, blank=True, db_column='hesp_IdPropiedadHerramental')
+    hesp_IdPropiedadHerramental = models.ForeignKey(PropiedadHerramental, on_delete=models.PROTECT, null=True, blank=True, db_column='hesp_IdPropiedadHerramental')
     hesp_IdPlano = models.IntegerField(null=True, blank=True, db_column='hesp_IdPlano')
     hesp_IdManual = models.IntegerField(null=True, blank=True, db_column='hesp_IdManual')
     hesp_IdImagen = models.IntegerField(null=True, blank=True, db_column='hesp_IdImagen')
