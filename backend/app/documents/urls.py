@@ -41,12 +41,12 @@ urlpatterns = [
     path('documents/<int:pk>/', DocumentoDetailView.as_view(), name='documento-detail'),
 
     # 2. PLANOS (Tabla: PLANO)
-    # URL: /api/planos/
+    # URL: /api/documents/planos/
     path('documents/planos/', PlanoUploadView.as_view(), name='plano-list-create'),
     path('documents/planos/<int:pk>/', PlanoDetailView.as_view(), name='plano-detail'),
 
     # 3. MANUALES (Tabla: MANUAL)
-    # URL: /api/manuales/
+    # URL: /api/documents/manuales/
     path('documents/manuales/', ManualUploadView.as_view(), name='manual-list-create'),
     path('documents/manuales/<int:pk>/', ManualDetailView.as_view(), name='manual-detail'),
 ]
