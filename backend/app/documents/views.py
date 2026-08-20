@@ -81,7 +81,16 @@ class ManualUploadView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = ManualSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            if 'usuario' not in serializer.validated_data or serializer.validated_data.get('usuario') is None:
+                usuario = None
+                if request.user and getattr(request.user, 'is_authenticated', False) and hasattr(request.user, 'id'):
+                    usuario = request.user
+                else:
+                    from app.usuarios.models import Usuario
+                    usuario = Usuario.objects.first()
+                serializer.save(usuario=usuario)
+            else:
+                serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

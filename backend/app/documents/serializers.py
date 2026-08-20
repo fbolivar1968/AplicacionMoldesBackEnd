@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Imagen, Plano, Manual
+from app.usuarios.models import Usuario
 
 class DocumentoSerializer(serializers.ModelSerializer):
     # Mapeamos para que en Postman uses nombres simples
@@ -39,10 +40,16 @@ class PlanoSerializer(serializers.ModelSerializer):
 class ManualSerializer(serializers.ModelSerializer):
     archivo = serializers.FileField(source='RutaRelativaManual')
     nombre = serializers.CharField(source='NombreManual')
+    id_usuario = serializers.PrimaryKeyRelatedField(
+        source='usuario',
+        queryset=Usuario.objects.all(),
+        required=False,
+        allow_null=True
+    )
 
     class Meta:
         model = Manual
-        fields = ['IdManual', 'archivo', 'nombre', 'FechaCreacion']
+        fields = ['IdManual', 'archivo', 'nombre', 'id_usuario', 'FechaCreacion']
         read_only_fields = ['IdManual', 'FechaCreacion']
 
     def validate_archivo(self, value):

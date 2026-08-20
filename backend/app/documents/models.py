@@ -56,6 +56,14 @@ class Manual(models.Model):
     NombreManual = models.CharField(max_length=60, db_column='mn_NombreManual')
     FechaCreacion = models.DateTimeField(auto_now_add=True, db_column='mn_FechaCreacion')
     RutaRelativaManual = models.FileField(upload_to=upload_to_path, max_length=255, db_column='mn_RutaRelativa')
+    usuario = models.ForeignKey(
+        'usuarios.Usuario',
+        on_delete=models.PROTECT,
+        db_column='mn_IdUsuario',
+        null=True,
+        blank=True,
+        related_name='manuales'
+    )
 
     class Meta:
         db_table = 'MANUAL'
