@@ -10,8 +10,20 @@ def upload_to_path(instance, filename):
     nombre_limpio = str(nombre).replace(" ", "_")
     nuevo_nombre = f"{timestamp}_{nombre_limpio}.{ext}"
 
-    folders = {'pdf': 'pdf', 'jpg': 'imagenes', 'jpeg': 'imagenes', 'png': 'imagenes', 'docx': 'docs', 'doc': 'docs'}
-    folder = folders.get(ext, 'others')
+    # Determinamos la carpeta según el tipo de modelo
+    model_name = instance.__class__.__name__.lower() if instance else ''
+
+    if model_name == 'plano':
+        folder = 'planos'
+    elif model_name == 'manual':
+        folder = 'manuales'
+    elif model_name == 'imagen':
+        folder = 'imagenes'
+    else:
+        # Fallback basado en extensión si no coincide con los modelos conocidos
+        folders = {'pdf': 'pdf', 'jpg': 'imagenes', 'jpeg': 'imagenes', 'png': 'imagenes', 'docx': 'docs', 'doc': 'docs'}
+        folder = folders.get(ext, 'others')
+
     return os.path.join(folder, nuevo_nombre)
 
 class Imagen(models.Model):
