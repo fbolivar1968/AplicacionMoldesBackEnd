@@ -39,11 +39,10 @@ class PlanoSerializer(serializers.ModelSerializer):
 class ManualSerializer(serializers.ModelSerializer):
     archivo = serializers.FileField(source='RutaRelativaManual')
     nombre = serializers.CharField(source='NombreManual')
-    descripcion = serializers.CharField(source='DescripcionManual', required=False)
 
     class Meta:
         model = Manual
-        fields = ['IdManual', 'archivo', 'nombre', 'descripcion', 'FechaCreacion']
+        fields = ['IdManual', 'archivo', 'nombre', 'FechaCreacion']
         read_only_fields = ['IdManual', 'FechaCreacion']
 
     def validate_archivo(self, value):
