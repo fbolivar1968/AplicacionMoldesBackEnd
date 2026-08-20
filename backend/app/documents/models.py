@@ -55,7 +55,6 @@ class Manual(models.Model):
     IdManual = models.AutoField(primary_key=True, db_column='mn_IdManual')
     NombreManual = models.CharField(max_length=60, db_column='mn_NombreManual')
     FechaCreacion = models.DateTimeField(auto_now_add=True, db_column='mn_FechaCreacion')
-    DescripcionManual = models.CharField(max_length=500, blank=True, null=True, db_column='mn_DescripcionManual')
     RutaRelativaManual = models.FileField(upload_to=upload_to_path, max_length=255, db_column='mn_RutaRelativa')
 
     class Meta:
