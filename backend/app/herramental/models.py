@@ -298,7 +298,7 @@ class HerramentalEspecifico(models.Model):
     hesp_FechaReparacion = models.DateTimeField(null=True, blank=True, db_column='hesp_FechaReparacion')
     hesp_Criticidad = models.CharField(max_length=20, null=True, blank=True, db_column='hesp_Criticidad')
     # Atributos técnicos (TINYINT -> PositiveSmallIntegerField, DECIMAL -> DecimalField)
-    hesp_NumNariz = models.PositiveSmallIntegerField(null=True, blank=True, db_column='hesp_NumNariz')
+    hesp_NumNariz = models.CharField(max_length=10, null=True, blank=True, db_column='hesp_NumNariz')
     hesp_NumCopas = models.PositiveSmallIntegerField(null=True, blank=True, db_column='hesp_NumCopas')
     hesp_Radio = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True, db_column='hesp_Radio')
     hesp_Altura1 = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True, db_column='hesp_Altura1')
