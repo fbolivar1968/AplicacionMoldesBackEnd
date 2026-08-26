@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
                 ('hesp_CantPieza', models.IntegerField(db_column='hesp_CantPieza')),
                 ('hesp_Observacion', models.CharField(blank=True, db_column='hesp_Observacion', max_length=100, null=True)),
                 ('hesp_FechaReparacion', models.DateTimeField(blank=True, db_column='hesp_FechaReparacion', null=True)),
-                ('hesp_NumNariz', models.PositiveSmallIntegerField(blank=True, db_column='hesp_NumNariz', null=True)),
+                ('hesp_NumNariz', models.CharField(blank=True, db_column='hesp_NumNariz', max_length=10, null=True)),
                 ('hesp_NumCopas', models.PositiveSmallIntegerField(blank=True, db_column='hesp_NumCopas', null=True)),
                 ('hesp_Radio', models.DecimalField(blank=True, db_column='hesp_Radio', decimal_places=4, max_digits=10, null=True)),
                 ('hesp_Altura1', models.DecimalField(blank=True, db_column='hesp_Altura1', decimal_places=4, max_digits=10, null=True)),
