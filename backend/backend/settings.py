@@ -32,7 +32,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '10.1.2.14', 'localhost', '127.0.0.1', '10.1.2.180',
-    '10.1.0.226', '10.1.1.14', 'http://ghfb.forjasbolivar.com', '181.143.6.154'
+    '10.1.0.226', '10.1.1.14', 'ghfb.forjasbolivar.com', 'localhost', '127.0.0.1'
 ]
 
 
@@ -117,7 +117,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5174",
     "http://10.1.0.62:5174", #IP Ethernet - Frontend - Karo
     "http://10.1.2.180:5174", #IP Wifi - Frontend - Karo
-    "http://ghfb.forjasbolivar.com"
+    'https://ghfb.forjasbolivar.com'
 ]
 
 # Permitir todas las solicitudes CORS (solo para desarrollo)
