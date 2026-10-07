@@ -17,4 +17,5 @@ urlpatterns = [
     path('api/', include('app.temp.urls')),
     #path('api/', include('herramental.urls')), # Ruta para la aplicación herramental
     path('api/auth/', include('app.auth_app.urls')),
+    
 ]
