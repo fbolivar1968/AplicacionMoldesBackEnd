@@ -236,12 +236,12 @@ SIMPLE_JWT = {
 # Nuestro backend personalizado valida contra la tabla USUARIO de negocio.
 # ModelBackend (el default) valida contra auth_user; lo mantenemos como fallback
 # para el panel de administración de Django.
-# AUTHENTICATION_BACKENDS = [
+AUTHENTICATION_BACKENDS = [
 #     # Primero: nuestro backend de negocio (tabla USUARIO)
-#     #'app.auth_app.backends.UsuarioNegocioBackend',
+      'app.auth_app.backends.UsuarioNegocioBackend',
 #     # ModelBackend por defecto desactivado para evitar consultas a auth_user
 #     # 'django.contrib.auth.backends.ModelBackend',
-# ]
+]
 
 
 # ==============================================================================
