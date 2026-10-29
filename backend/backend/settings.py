@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '10.1.2.14', 'localhost', '127.0.0.1', '10.1.2.180',
+    '10.1.2.14', 'localhost', '127.0.0.1', '10.1.2.180', '10.1.1.52',
     '10.1.0.226', '10.1.1.14', 'ghfb.forjasbolivar.com', 'localhost', '127.0.0.1'
 ]
 
